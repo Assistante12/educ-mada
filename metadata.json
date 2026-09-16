@@ -1,0 +1,6 @@
+{
+  "name": "Plateforme Scolaire Madagascar",
+  "description": "Plateforme éducative intelligente d'exercices scolaires pour CM2, 3ème et Terminale (L, S, OSE) selon le programme officiel de Madagascar.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
