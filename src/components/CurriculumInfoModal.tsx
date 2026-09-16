@@ -42,20 +42,22 @@ export const CurriculumInfoModal: React.FC<CurriculumInfoModalProps> = ({
         <div className="space-y-4 text-xs text-stone-700 leading-relaxed">
           <div className="p-4 bg-emerald-50 rounded-2xl border border-emerald-200">
             <h3 className="font-bold text-stone-900 text-sm mb-1">
-              Fanavaozana ny fandaharam-pianarana (Réformes Récentes)
+              Fanavaozana ny fandaharam-pianarana (Fiovana Ofisialy 9 Septambra 2026)
             </h3>
             <p>
-              Ity plateforme ity dia mifanaraka tanteraka amin'ny fandaharam-pianarana ofisialy manan-kery eto Madagasikara :
+              Ity plateforme ity dia mifanaraka tanteraka amin'ny fandaharam-pianarana ofisialy farany nampiharin'ny Ministeran'ny Fanabeazam-pirenena (MEN Madagascar) nanomboka tamin'ny <strong>9 Septambra 2026</strong> :
             </p>
-            <ul className="list-disc pl-5 mt-2 space-y-1">
+            <ul className="list-disc pl-5 mt-2 space-y-1.5">
               <li>
-                <strong>Terminale :</strong> Fampiharana ny rafitra vaovao ahitana ny <strong>Série L</strong> (Littéraire), <strong>Série S</strong> (Scientifique), ary indrindra ny <strong>Série OSE</strong> (Organisation, Société et Économie) mampiditra ny taranja SES (Sciences Économiques et Sociales) sy Mathématiques appliquées.
+                <strong>Taranja Vaovao Nampidirina nanomboka Primaire ka hatramin'ny Terminale :</strong>
+                <div className="mt-1 space-y-1 text-[11px] text-stone-700 bg-white/70 p-2.5 rounded-lg border border-emerald-200">
+                  <p>• <strong>CM2 (Primaire) :</strong> Nampidirina ny FOV (Fanabeazana ho Olom-pirenena Vanona), Arts sy Kolontsaina Malagasy, ary Tontolo Iainana & Toetrandro.</p>
+                  <p>• <strong>3ème (Collège - BEPC) :</strong> Nampidirina ny FOV (ampianarina amin'ny teny Malagasy), Arts (Éducation Artistique et Culturelle), ary TICE & Kajy Mirindra (Informatique). Ny Anglais dia lasa taranja tsy maintsy atao (obligatoire) ho an'ny mpiadina rehetra.</p>
+                  <p>• <strong>Terminale (Lycée - Baccalauréat) :</strong> Nampidirina ny EAC (Éducation à la Citoyenneté) sy ny TICE & Kajy Mirindra amin'ny Série rehetra (L, S, OSE), miampy ny taranja SES (Sciences Économiques et Sociales) ho an'ny Série OSE.</p>
+                </div>
               </li>
               <li>
-                <strong>3ème :</strong> Fanomanana ny BEPC miaraka amin'ny fitsipi-panadinana ofisialy sy ny taranja rehetra (Malagasy, Maths, PC, SVT, Français, HG/ECM, Anglais).
-              </li>
-              <li>
-                <strong>CM2 :</strong> Fanomanana ny CEPE (Kajy, Malagasy, Frantsay, Tontolo iainana & Siansa, Tantara sy Jeografia).
+                <strong>Fikajiana ny Naoty (Règle des 10 Niveaux) :</strong> Ao anaty matière iray dia misy 10 niveau. Ny fitambaran'ny isa azo amin'ireo niveau 10 ireo (2 points isaky ny niveau) no manome ny naoty <strong>SUR 20 (/20)</strong> ho an'ilay matière, fa tsy isaky ny niveau no atao sur 20.
               </li>
             </ul>
           </div>

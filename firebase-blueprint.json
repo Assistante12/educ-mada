@@ -1,0 +1,54 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "User Profile",
+      "description": "Store authenticated student user accounts and academic preferences",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string" },
+        "email": { "type": "string" },
+        "fullName": { "type": "string" },
+        "schoolName": { "type": "string" },
+        "classId": { "type": "string" },
+        "serieId": { "type": "string" },
+        "role": { "type": "string" },
+        "avatar": { "type": "string" },
+        "createdAt": { "type": "string" },
+        "lastLoginAt": { "type": "string" }
+      },
+      "required": ["uid", "email", "fullName", "classId"]
+    },
+    "StudentProgress": {
+      "title": "Student Subject Progress",
+      "description": "Progress and levels completed by a student for each subject",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "subjectKey": { "type": "string" },
+        "subjectId": { "type": "string" },
+        "grade": { "type": "string" },
+        "serieId": { "type": "string" },
+        "currentLevel": { "type": "number" },
+        "maxUnlockedLevel": { "type": "number" },
+        "totalExercisesDone": { "type": "number" },
+        "totalCorrect": { "type": "number" },
+        "levelScores": { "type": "object" },
+        "subjectTotalScore": { "type": "number" },
+        "averageScore": { "type": "number" },
+        "progressionPercent": { "type": "number" },
+        "updatedAt": { "type": "string" }
+      },
+      "required": ["userId", "subjectKey", "maxUnlockedLevel"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "UserProfile",
+      "description": "User profile document containing identity, grade, school"
+    },
+    "/users/{userId}/progress/{subjectKey}": {
+      "schema": "StudentProgress",
+      "description": "Subcollection storing academic scores and level progression for each subject"
+    }
+  }
+}

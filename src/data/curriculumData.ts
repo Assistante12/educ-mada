@@ -65,22 +65,58 @@ export const OFFICIAL_CURRICULUM: Record<GradeLevel, ClassCurriculum> = {
       },
       {
         id: 'histoire_geo_cm2',
-        name: 'Histoire-Géo & Éducation Civique (Tantara sy Jeografia)',
+        name: 'Histoire-Géo (Tantara sy Jeografia)',
         shortName: 'Tantara-Jeo',
         iconName: 'MapPin',
         coefficient: 2,
-        description: 'Madagasikara: Ny faritra 23, renirano, tendrombohitra, ny tantara fohin\'ireo mpanjaka malagasy, zon\'ny ankizy',
-        themes: ['Géographie physique de Madagascar', 'Les 23 Régions de Madagascar', 'Histoire des Souverains Malagasy', 'Éducation Civique & Citoyenneté'],
+        description: 'Madagasikara: Ny faritra 23, renirano, tendrombohitra, ny tantara fohin\'ireo mpanjaka malagasy',
+        themes: ['Géographie physique de Madagascar', 'Les 23 Régions de Madagascar', 'Histoire des Souverains Malagasy'],
         color: 'indigo'
+      },
+      {
+        id: 'fov_cm2',
+        name: 'Fanabeazana ho Olom-pirenena Vanona (FOV)',
+        shortName: 'FOV',
+        iconName: 'ShieldCheck',
+        coefficient: 2,
+        description: 'Fitaizana ny maha olom-pirenena, Zon\'ny ankizy sy andraikitra, Soatoavina malagasy, Fihavanana, Fanevam-pirenena',
+        themes: ['Zon\'ny Ankizy sy Andraikitra', 'Fihavanana sy Soatoavina Malagasy', 'Fanajana ny Lalàna sy Fitaovam-bahoaka', 'Fitiavan-tanindrazana'],
+        color: 'emerald',
+        isNew: true,
+        badgeNote: 'Matière Vaovao - 9 Septambra 2026'
+      },
+      {
+        id: 'arts_cm2',
+        name: 'Arts sy Kolontsaina Malagasy',
+        shortName: 'Arts & Kolontsaina',
+        iconName: 'Palette',
+        coefficient: 1,
+        description: 'Hanto sy kolontsaina, Sary sy loko, Fitaovam-pitendry mozika nentim-paharazana (valiha, marovany, sodina), Vakoka',
+        themes: ['Kanto ara-tsary sy Loko', 'Fitaovam-pitendry sy Hira Malagasy', 'Vakoka sy Asa-tanana'],
+        color: 'pink',
+        isNew: true,
+        badgeNote: 'Matière Vaovao - 9 Septambra 2026'
+      },
+      {
+        id: 'climat_cm2',
+        name: 'Tontolo Iainana sy Fiovana Toetrandro',
+        shortName: 'Toetrandro & Ala',
+        iconName: 'Leaf',
+        coefficient: 2,
+        description: 'Fiarovana ny ala sy ny zavamananaina eto Madagasikara, Ny fiovana toetrandro, Fambolen-kazo sy fiarovana amin\'ny hain-tany sy rivodoza',
+        themes: ['Fiarovana ny Ala sy ny Zavaboary', 'Fahatakarana ny Fiovana Toetrandro', 'Fiarovana amin\'ny Loza Voajanahary'],
+        color: 'teal',
+        isNew: true,
+        badgeNote: 'Matière Vaovao - 9 Septambra 2026'
       }
     ]
   },
   '3ème': {
     grade: '3ème',
-    label: 'Classe de 3ème (Troisième)',
-    examName: 'Examen Officiel du BEPC (Brevet d\'Études du Premier Cycle)',
-    description: 'Programme officiel du Collège du Ministère de l\'Éducation Nationale de Madagascar.',
-    officialRef: 'Curriculum National MEN Madagascar - Enseignement Secondaire 1er Cycle / BEPC',
+    label: 'Classe de 3ème (Troisième - BEPC)',
+    examName: 'Examen Officiel du BEPC (Brevet d\'Études du Premier Cycle - Réforme 2026)',
+    description: 'Programme officiel réformé du Collège par le Ministère de l\'Éducation Nationale (MEN Madagascar).',
+    officialRef: 'Curriculum National MEN Madagascar - Réforme Décret 2026 / BEPC Tronc Unique',
     subjects: [
       {
         id: 'mathematiques_3eme',
@@ -134,23 +170,59 @@ export const OFFICIAL_CURRICULUM: Record<GradeLevel, ClassCurriculum> = {
       },
       {
         id: 'histoire_geo_3eme',
-        name: 'Histoire - Géographie & Citoyenneté',
+        name: 'Histoire - Géographie (avec Climat & Énergies Renouvelables)',
         shortName: 'Histoire-Géo',
         iconName: 'Landmark',
         coefficient: 3,
-        description: 'Madagascar de la colonisation à l\'indépendance (1947, 1960), Les relations internationales, Géographie économique de Madagascar',
-        themes: ['Madagascar sous le Régime Colonial & Résistances', 'L\'Insurrection de 1947 et l\'Indépendance', 'Géographie Économique de Madagascar', 'Institutions & Citoyenneté'],
+        description: 'Madagascar de la période coloniale à l\'indépendance (1947, 1960), Climat et énergies renouvelables à Madagascar, Géographie économique',
+        themes: ['Madagascar & Décolonisation (1947, 1960)', 'Changement Climatique & Énergies Renouvelables à Madagascar', 'Géographie Économique des Régions Malgaches'],
         color: 'indigo'
       },
       {
         id: 'anglais_3eme',
-        name: 'Anglais (English)',
+        name: 'Anglais (English - Épreuve Obligatoire BEPC)',
         shortName: 'Anglais',
         iconName: 'Globe',
         coefficient: 2,
-        description: 'Grammar (Tenses, Modals, Passive voice), Reading comprehension on daily life, environment, society',
+        description: 'Grammar (Tenses, Modals, Passive voice), Reading comprehension on daily life, environment, society. Obligatoire pour TOUS les candidats au BEPC.',
         themes: ['Verb Tenses & Modals', 'Passive & Active Voice', 'Reading Comprehension', 'Vocabulary & Writing'],
         color: 'violet'
+      },
+      {
+        id: 'fov_3eme',
+        name: 'Fanabeazana ho Olom-pirenena Vanona (FOV)',
+        shortName: 'FOV',
+        iconName: 'ShieldCheck',
+        coefficient: 2,
+        description: 'Lalàmpanorenana, Andrim-panjakana, Zo sy Andraikitra, Fihavanana sy fampihavanana, Fiarovana ny tombontsoam-bahoaka (ampianarina amin\'ny teny Malagasy)',
+        themes: ['Ireo Andrim-panjakana sy ny Lalàmpanorenana', 'Ny Demokrasia sy ny Fifidianana Madio', 'Fihavanana sy Fitantanana ny Fifanolanana', 'Fiarovana ny Harem-pirenena sy ny Tontolo Iainana'],
+        color: 'emerald',
+        isNew: true,
+        badgeNote: 'Matière Vaovao BEPC - 9 Septambra 2026'
+      },
+      {
+        id: 'arts_3eme',
+        name: 'Arts (Éducation Artistique et Culturelle)',
+        shortName: 'Arts',
+        iconName: 'Palette',
+        coefficient: 2,
+        description: 'Arts visuels, Dessin, Patrimoine musical malgache, Arts vivants et expression corporelle',
+        themes: ['Arts Visuels & Géométrie Artistique', 'Patrimoine Musical & Rythmes Traditionnels Malagasy', 'Histoire de l\'Art & Monuments Historiques de Madagascar'],
+        color: 'pink',
+        isNew: true,
+        badgeNote: 'Matière Vaovao BEPC - 9 Septambra 2026'
+      },
+      {
+        id: 'tice_3eme',
+        name: 'TICE & Kajy Mirindra (Informatique)',
+        shortName: 'TICE',
+        iconName: 'Laptop',
+        coefficient: 2,
+        description: 'Fototry ny solosaina, Fampiasana rindrambaiko birao, Aterineto azo antoka, Cyber-sécurité sy fiarovana ny angon-drakitra manokana',
+        themes: ['Fototry ny Kajy Mirindra (Informatique de Base)', 'Fikarakarana Lahatsoratra & Rindrambaiko Birao', 'Aterineto sy Fikarohana Azo Antoka', 'Fiarovana ny Tsiambaratelo & Cyber-sécurité'],
+        color: 'cyan',
+        isNew: true,
+        badgeNote: 'Matière Vaovao BEPC - 9 Septambra 2026'
       }
     ]
   },
@@ -235,6 +307,30 @@ export const OFFICIAL_CURRICULUM: Record<GradeLevel, ClassCurriculum> = {
             description: 'Santé publique, Écologie et gestion des ressources naturelles à Madagascar, Notions de génétique humaine',
             themes: ['Santé Publique & Épidémiologie', 'Écologie & Forêts Malgaches', 'Génétique Humaine & Hérédité'],
             color: 'teal'
+          },
+          {
+            id: 'eac_tl',
+            name: 'Éducation à la Citoyenneté (EAC)',
+            shortName: 'EAC',
+            iconName: 'ShieldCheck',
+            coefficient: 2,
+            description: 'Fanabeazana ho olom-pirenena vanona, Fanjakana tan-dalàna, Fitantanana tsara, Fiarovana ny zon\'olombelona sy ny tontolo iainana',
+            themes: ['Gouvernance Démocratique & État de Droit', 'Éthique Publique & Lutte contre la Corruption', 'Citoyenneté Écologique & Développement Durable'],
+            color: 'emerald',
+            isNew: true,
+            badgeNote: 'Matière Vaovao Bac - 9 Septambra 2026'
+          },
+          {
+            id: 'tice_tl',
+            name: 'TICE & Kajy Mirindra (Informatique)',
+            shortName: 'TICE',
+            iconName: 'Laptop',
+            coefficient: 2,
+            description: 'Kolontsaina nomerika, Fikarohana sy fanasokajiana angon-drakitra, Fampiasana solosaina amin\'ny fandalinana literatiora',
+            themes: ['Culture Numérique & Société', 'Recherche Documentaire Numérique & Esprit Critique', 'Traitement de Texte Avancé & Outils Collaboratifs'],
+            color: 'cyan',
+            isNew: true,
+            badgeNote: 'Matière Vaovao Bac - 9 Septambra 2026'
           }
         ]
       },
@@ -322,6 +418,30 @@ export const OFFICIAL_CURRICULUM: Record<GradeLevel, ClassCurriculum> = {
             description: 'Le monde contemporain et l\'organisation économique, Madagascar et ses potentialités de développement',
             themes: ['Relations Internationales & Géopolitique', 'Mondialisation Économique', 'Madagascar : Territoires & Économie'],
             color: 'indigo'
+          },
+          {
+            id: 'eac_ts',
+            name: 'Éducation à la Citoyenneté (EAC)',
+            shortName: 'EAC',
+            iconName: 'ShieldCheck',
+            coefficient: 2,
+            description: 'Éthique de la science et technologies, Droits civiques, Développement durable et intégrité',
+            themes: ['Éthique Scientifique & Bioéthique', 'Gouvernance & État de Droit', 'Citoyenneté Écologique & Climat'],
+            color: 'emerald',
+            isNew: true,
+            badgeNote: 'Matière Vaovao Bac - 9 Septambra 2026'
+          },
+          {
+            id: 'tice_ts',
+            name: 'TICE & Kajy Mirindra (Informatique)',
+            shortName: 'TICE',
+            iconName: 'Laptop',
+            coefficient: 2,
+            description: 'Algorithmique, Traitement numérique de données, Simulation scientifique, Sécurité des réseaux',
+            themes: ['Algorithmique & Résolution de Problèmes', 'Traitement & Visualisation Numérique de Données', 'Réseaux & Cyber-sécurité'],
+            color: 'cyan',
+            isNew: true,
+            badgeNote: 'Matière Vaovao Bac - 9 Septambra 2026'
           }
         ]
       },
@@ -399,6 +519,30 @@ export const OFFICIAL_CURRICULUM: Record<GradeLevel, ClassCurriculum> = {
             description: 'Business and economic vocabulary, International trade texts, Formal correspondence and essay writing',
             themes: ['Economy & Business Vocabulary', 'Reading Comprehension of Economic Articles', 'Report & Essay Writing', 'Communication in Global Trade'],
             color: 'violet'
+          },
+          {
+            id: 'eac_tose',
+            name: 'Éducation à la Citoyenneté (EAC)',
+            shortName: 'EAC',
+            iconName: 'ShieldCheck',
+            coefficient: 2,
+            description: 'Responsabilité Sociétale des Entreprises (RSE), Transparence financière, Lutte contre la corruption, Éthique des affaires',
+            themes: ['Responsabilité Sociétale des Entreprises (RSE)', 'Transparence Financière & Anti-Corruption', 'Citoyenneté Économique & Justice Sociale'],
+            color: 'emerald',
+            isNew: true,
+            badgeNote: 'Matière Vaovao Bac - 9 Septambra 2026'
+          },
+          {
+            id: 'tice_tose',
+            name: 'TICE & Kajy Mirindra (Informatique de Gestion)',
+            shortName: 'TICE',
+            iconName: 'Laptop',
+            coefficient: 2,
+            description: 'Informatique de gestion, Tableurs avancés, Commerce électronique et modélisation de flux d\'entreprise',
+            themes: ['Tableurs & Analyse Numérique de Données', 'Commerce Électronique & Économie Numérique', 'Sécurité des Systèmes d\'Information'],
+            color: 'cyan',
+            isNew: true,
+            badgeNote: 'Matière Vaovao Bac - 9 Septambra 2026'
           }
         ]
       }
@@ -1010,6 +1154,127 @@ export const SEED_QUESTIONS: Question[] = [
     correctIndex: 0,
     explanation: 'First conditional structure: "If + present simple, will + base form". Here, "If biodiversity is not protected, unique species will disappear".',
     source: 'Baccalauréat Série L Madagascar - English Examination'
+  },
+  // --- FOV CM2 (Fanabeazana ho Olom-pirenena Vanona) ---
+  {
+    id: 'cm2_fov_lvl1_1',
+    classId: 'CM2',
+    subjectId: 'fov_cm2',
+    level: 1,
+    theme: "Fihavanana sy Soatoavina Malagasy",
+    question: "Araka ny soatoavina malagasy nentim-paharazana sy ny fampianarana FOV, inona no hevitry ny ohabolana hoe : \"Ny fihavanana toy ny kofehy manify, raha toprana tapaka, fa raha tohizana mitohy\" ?",
+    options: [
+      "Mila koloina sy tandremana mandrakariva ny fifandraisana tsara eo amin'ny fiarahamonina",
+      "Tsy misy ilana azy ny mifandray amin'ny mpiara-belona",
+      "Ny vola no zava-dehibe indrindra mihoatra ny havana",
+      "Tsy azo amboarina intsony ny disadisa rehefa mitranga"
+    ],
+    correctIndex: 0,
+    explanation: "Ny Fihavanana dia soatoavina iankinan'ny fiarahamonina malagasy, izay mitaky fifanajana, fifandeferana ary fihazonana ny firaisankina.",
+    source: "Fandaharam-pianarana Ofisialy MEN Madagascar - FOV CM2"
+  },
+  {
+    id: 'cm2_fov_lvl2_1',
+    classId: 'CM2',
+    subjectId: 'fov_cm2',
+    level: 2,
+    theme: "Zon'ny Ankizy sy Andraikitra",
+    question: "Inona no zony fototra lehibe indrindra ananan'ny ankizy malagasy rehetra araka ny Lalàna sy ny Fifanarahana Iraisam-pirenena ?",
+    options: [
+      "Zo hanana anarana, zom-pirenena ary hahazo fanabeazana sy fahasalamana",
+      "Zo hiasa sy hitady vola hatramin'ny fahazazana",
+      "Zo tsy handeha hianatra raha tsy mazoto",
+      "Zo tsy hanaja ray aman-dreny sy mpampianatra"
+    ],
+    correctIndex: 0,
+    explanation: "Ny ankizy tsirairay dia manan-jo hahazo anarana, zom-pirenena, fiahiana ara-pahasalamana ary fampianarana maimaimpoana sy manara-penitra.",
+    source: "Fandaharam-pianarana Ofisialy MEN Madagascar - FOV CM2"
+  },
+  // --- Arts CM2 ---
+  {
+    id: 'cm2_arts_lvl1_1',
+    classId: 'CM2',
+    subjectId: 'arts_cm2',
+    level: 1,
+    theme: "Fitaovam-pitendry sy Hira Malagasy",
+    question: "Iza amin'ireto fitaovam-pitendry mozika nentim-paharazana ireto no vita amin'ny volotsangana (bambou) ary mampiavaka an'i Madagasikara maneran-tany ?",
+    options: ["Ny Valiha", "Ny Gitara elektrika", "Ny Lokanga tandrefana", "Ny Pianô"],
+    correctIndex: 0,
+    explanation: "Ny Valiha dia zavamaneno nentim-paharazana malagasy manana kofehy maro manodidina ny vatany vita amin'ny volotsangana.",
+    source: "Fandaharam-pianarana Ofisialy MEN Madagascar - Arts CM2"
+  },
+  // --- Climat CM2 ---
+  {
+    id: 'cm2_climat_lvl1_1',
+    classId: 'CM2',
+    subjectId: 'climat_cm2',
+    level: 1,
+    theme: "Fiarovana ny Ala sy ny Zavaboary",
+    question: "Nahoana no tena zava-dehibe ho an'i Madagasikara ny fambolen-kazo sy ny fampitsaharana ny doro ala (tavy) ?",
+    options: [
+      "Mba hiarovana ny tany tsy hokafohan'ny riaka sy hitazomana ny loharano ary ny biby mampiavaka ny nosy",
+      "Mba hahafahana mandoro hazo bebe kokoa amin'ny taona manaraka",
+      "Satria tsy misy orana intsony raha tsy may ny ala",
+      "Tsy misy ifandraisany amin'ny fiainana andavanandro ny ala"
+    ],
+    correctIndex: 0,
+    explanation: "Ny ala dia miaro ny nofon-tany amin'ny lavaka sy erosiona, mitahiry ny rano ambanin'ny tany ary miantoka ny toetrandro mandamina.",
+    source: "Fandaharam-pianarana Ofisialy MEN Madagascar - Tontolo Iainana CM2"
+  },
+  // --- FOV 3ème ---
+  {
+    id: '3eme_fov_lvl1_1',
+    classId: '3ème',
+    subjectId: 'fov_3eme',
+    level: 1,
+    theme: "Ireo Andrim-panjakana sy ny Lalàmpanorenana",
+    question: "Araka ny Lalàmpanorenan'ny Repoblikan'i Madagasikara, iza no Andrim-panjakana miantoka ny fiarovana ny fiandrianam-pirenena sy ny firaisam-pirenena ?",
+    options: [
+      "Ny Filohan'ny Repoblika",
+      "Ny Ben'ny tanàna fotsiny",
+      "Ny Fikambanana tsy miankina amin'ny fanjakana (ONG)",
+      "Ny Kaoperativa mpamboly"
+    ],
+    correctIndex: 0,
+    explanation: "Ny Filohan'ny Repoblika no Lehiben'ny Fanjakana, miantoka ny fanajana ny Lalàmpanorenana sy ny fiandrianam-pirenena.",
+    source: "Fandaharam-pianarana Ofisialy BEPC - FOV 3ème"
+  },
+  // --- TICE 3ème ---
+  {
+    id: '3eme_tice_lvl1_1',
+    classId: '3ème',
+    subjectId: 'tice_3eme',
+    level: 1,
+    theme: "Fiarovana ny Tsiambaratelo & Cyber-sécurité",
+    question: "Inona no fepetra tsara indrindra ampiasaina amin'ny famoronana tenimiafina (mot de passe) matanjaka amin'ny aterineto ?",
+    options: [
+      "Fampifangaroana litera lehibe sy kely, tarehimarika ary mari-tsoratra mihoatra ny 10 isa",
+      "Fampiasana ny daty nahaterahana fotsiny mba ho mora tadidy",
+      "Fampiasana ny teny hoe \"123456\" na \"madagascar\"",
+      "Fizarana ny tenimiafina amin'ny namana rehetra ao anaty tambajotra sosialy"
+    ],
+    correctIndex: 0,
+    explanation: "Ny tenimiafina azo antoka dia manambatra litera isan-karazany, tarehimarika ary mari-tsoratra manokana, ary tsy tokony hozaraina amin'olon-kafa na oviana na oviana.",
+    source: "Fandaharam-pianarana Ofisialy BEPC - TICE 3ème"
+  },
+  // --- EAC Terminale ---
+  {
+    id: 'term_eac_lvl1_1',
+    classId: 'Terminale',
+    serieId: 'Série S',
+    subjectId: 'eac_ts',
+    level: 1,
+    theme: "Éthique Scientifique & Bioéthique",
+    question: "Dans le cadre de l'Éducation à la Citoyenneté (EAC) au Baccalauréat, quelle est la responsabilité éthique fondamentale du scientifique vis-à-vis de la société ?",
+    options: [
+      "Veiller à ce que les innovations respectent la dignité humaine, la santé publique et la biodiversité",
+      "Rechercher le profit commercial sans se soucier des conséquences environnementales",
+      "Développer des technologies destructrices sans concertation citoyenne",
+      "Garder secrètes toutes les découvertes susceptibles de sauver des vies"
+    ],
+    correctIndex: 0,
+    explanation: "La bioéthique et l'éthique scientifique imposent le respect fondamental de la personne humaine et la préservation de l'écosystème planétaire.",
+    source: "Programme Officiel Baccalauréat Madagascar - EAC Terminale"
   }
 ];
 

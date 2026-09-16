@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
+import { AuthProvider, useAuth } from './context/AuthContext';
 import { Header } from './components/Header';
 import { HomePage } from './components/HomePage';
 import { ClassSelector } from './components/ClassSelector';
@@ -13,20 +14,19 @@ import {
   GradeLevel, 
   TerminaleSerie, 
   SubjectInfo, 
-  StudentProfile, 
   LevelSessionResult,
   BulletinData 
 } from './types';
-import { 
-  getStoredStudent, 
-  updateStudentProfileInfo, 
-  recordSessionResult, 
-  generateBulletin 
-} from './utils/storage';
-import { OFFICIAL_CURRICULUM } from './data/curriculumData';
+import { generateBulletin } from './utils/storage';
 
-export default function App() {
-  const [student, setStudent] = useState<StudentProfile>(getStoredStudent());
+function AppContent() {
+  const { 
+    student, 
+    currentUser, 
+    recordResult, 
+    updateStudentProfile 
+  } = useAuth();
+
   const [currentView, setCurrentView] = useState<string>('home');
   
   // Active playing selection
@@ -38,11 +38,6 @@ export default function App() {
   const [isAuthModalOpen, setIsAuthModalOpen] = useState<boolean>(false);
   const [isCurriculumModalOpen, setIsCurriculumModalOpen] = useState<boolean>(false);
 
-  // Refresh student profile
-  const refreshStudent = () => {
-    setStudent(getStoredStudent());
-  };
-
   // 1. Navigation handlers
   const handleNavigate = (view: string) => {
     setCurrentView(view);
@@ -50,26 +45,24 @@ export default function App() {
   };
 
   // 2. Class / Serie selection confirmation
-  const handleConfirmClass = (grade: GradeLevel, serie?: TerminaleSerie) => {
-    const updated = updateStudentProfileInfo(
+  const handleConfirmClass = async (grade: GradeLevel, serie?: TerminaleSerie) => {
+    await updateStudentProfile(
       student.fullName,
       student.schoolName,
       grade,
       serie
     );
-    setStudent(updated);
     setCurrentView('subjects');
   };
 
   // 3. Direct class selection from homepage
-  const handleSelectClassFromHome = (grade: GradeLevel, serie?: TerminaleSerie) => {
-    const updated = updateStudentProfileInfo(
+  const handleSelectClassFromHome = async (grade: GradeLevel, serie?: TerminaleSerie) => {
+    await updateStudentProfile(
       student.fullName,
       student.schoolName,
       grade,
       serie
     );
-    setStudent(updated);
     setCurrentView('subjects');
   };
 
@@ -82,9 +75,8 @@ export default function App() {
   };
 
   // 5. When exercise session finishes
-  const handleSessionComplete = (result: LevelSessionResult) => {
-    const updated = recordSessionResult(result);
-    setStudent(updated);
+  const handleSessionComplete = async (result: LevelSessionResult) => {
+    await recordResult(result);
     setSessionResult(result);
   };
 
@@ -105,16 +97,6 @@ export default function App() {
     const currentLvl = sessionResult.level;
     setSessionResult(null);
     handleStartLevel(activeSubject, currentLvl);
-  };
-
-  const handleSaveProfile = (
-    fullName: string, 
-    schoolName: string, 
-    classId: GradeLevel, 
-    serieId?: TerminaleSerie
-  ) => {
-    const updated = updateStudentProfileInfo(fullName, schoolName, classId, serieId);
-    setStudent(updated);
   };
 
   const bulletinData: BulletinData = generateBulletin(student);
@@ -155,6 +137,14 @@ export default function App() {
             serie={student.serieId}
             student={student}
             onChangeClass={() => setCurrentView('classes')}
+            onSelectSerie={async (newSerie) => {
+              await updateStudentProfile(
+                student.fullName,
+                student.schoolName,
+                student.classId,
+                newSerie
+              );
+            }}
             onSelectLevelToPlay={handleStartLevel}
           />
         )}
@@ -204,12 +194,10 @@ export default function App() {
         />
       )}
 
-      {/* Profile / Registration Modal */}
+      {/* Profile / Registration & Authentication Modal */}
       <AuthModal
         isOpen={isAuthModalOpen}
         onClose={() => setIsAuthModalOpen(false)}
-        student={student}
-        onSave={handleSaveProfile}
       />
 
       {/* Official Curriculum & Decrees Info Modal */}
@@ -218,5 +206,13 @@ export default function App() {
         onClose={() => setIsCurriculumModalOpen(false)}
       />
     </div>
+  );
+}
+
+export default function App() {
+  return (
+    <AuthProvider>
+      <AppContent />
+    </AuthProvider>
   );
 }

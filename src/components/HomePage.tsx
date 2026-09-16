@@ -67,8 +67,13 @@ export const HomePage: React.FC<HomePageProps> = ({
               onClick={onLogin}
               className="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-white hover:bg-stone-50 text-stone-800 font-semibold text-base border border-stone-300 shadow-2xs transition-all flex items-center justify-center gap-2 cursor-pointer"
             >
-              <span>SE CONNECTER</span>
+              <span>SE CONNECTER / S'INSCRIRE</span>
             </button>
+          </div>
+
+          <div className="flex items-center justify-center gap-2 text-xs text-stone-500 pt-1">
+            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+            <span>Base de données Firestore mavitrika • Tahiry an-tserasera azo antoka</span>
           </div>
         </div>
 

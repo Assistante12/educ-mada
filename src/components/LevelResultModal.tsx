@@ -29,6 +29,12 @@ export const LevelResultModal: React.FC<LevelResultModalProps> = ({
   onViewBulletin,
 }) => {
   const isPassed = result.status === 'VALIDE';
+  const levelPts = typeof result.levelScoreOutOf2 === 'number'
+    ? result.levelScoreOutOf2
+    : Math.round(((result.correctAnswers / result.totalQuestions) * 2) * 10) / 10;
+  const subjectTotal = typeof result.subjectTotalScoreOutOf20 === 'number'
+    ? result.subjectTotalScoreOutOf20
+    : result.scoreOutOf20;
 
   useEffect(() => {
     if (isPassed) {
@@ -62,6 +68,9 @@ export const LevelResultModal: React.FC<LevelResultModalProps> = ({
           <h3 className="text-lg font-extrabold text-stone-900 mt-1">
             Vokatry ny Fanadinana — Niveau {result.level} / 10
           </h3>
+          <p className="text-xs text-stone-500 mt-0.5">
+            Misy 10 niveau ity taranja ity — Ny fitambaran'izy 10 no manome ny naoty /20
+          </p>
         </div>
 
         {/* Mandatory Official Decision Banner */}
@@ -94,8 +103,8 @@ export const LevelResultModal: React.FC<LevelResultModalProps> = ({
 
           <p className="text-xs sm:text-sm font-medium opacity-90">
             {isPassed
-              ? 'Arahabaina ! Nahatratra ny naoty takiana (farafahakeliny 12/20) ianao.'
-              : 'Tsy nahatratra ny 12/20 ianao. Avereno indray ity niveau ity mandra-pahazoana 12/20 farafahakeliny.'}
+              ? `Arahabaina ! Nahazo ${levelPts} / 2 pts ianao tamin'ity Niveau ity (farafahakeliny 1.2 / 2 pts no takiana mba handrosoana).`
+              : `Nahazo ${levelPts} / 2 pts ianao. Tsy nahatratra ny 1.2 / 2 pts farafahakeliny. Avereno ity niveau ity mba hampitomboana ny naotinao amin'ny taranja.`}
           </p>
         </div>
 
@@ -103,11 +112,22 @@ export const LevelResultModal: React.FC<LevelResultModalProps> = ({
         <div className="grid grid-cols-3 gap-3 mb-6">
           <div className="p-3 bg-stone-50 rounded-xl border border-stone-200 text-center">
             <span className="text-[11px] text-stone-500 font-semibold block">
-              Moyenne
+              Isa amin'ity Niveau ity
             </span>
             <span className={`text-xl font-extrabold ${isPassed ? 'text-emerald-700' : 'text-red-700'}`}>
-              {result.scoreOutOf20} / 20
+              {levelPts} / 2 pts
             </span>
+            <span className="text-[10px] text-stone-400 block mt-0.5">Seuil: 1.2 pts</span>
+          </div>
+
+          <div className="p-3 bg-emerald-50/60 rounded-xl border border-emerald-200 text-center">
+            <span className="text-[11px] text-emerald-800 font-semibold block">
+              Totalin'ny Taranja
+            </span>
+            <span className="text-xl font-extrabold text-emerald-900">
+              {subjectTotal} / 20
+            </span>
+            <span className="text-[10px] text-emerald-700 block mt-0.5">Fitambaran'ny 10 niveaux</span>
           </div>
 
           <div className="p-3 bg-stone-50 rounded-xl border border-stone-200 text-center">
@@ -117,15 +137,7 @@ export const LevelResultModal: React.FC<LevelResultModalProps> = ({
             <span className="text-xl font-extrabold text-stone-900">
               {result.correctAnswers} / {result.totalQuestions}
             </span>
-          </div>
-
-          <div className="p-3 bg-stone-50 rounded-xl border border-stone-200 text-center">
-            <span className="text-[11px] text-stone-500 font-semibold block">
-              Fahombiazana
-            </span>
-            <span className="text-xl font-extrabold text-stone-900">
-              {result.percentage}%
-            </span>
+            <span className="text-[10px] text-stone-400 block mt-0.5">{result.percentage}%</span>
           </div>
         </div>
 

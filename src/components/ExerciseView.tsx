@@ -231,9 +231,10 @@ export const ExerciseView: React.FC<ExerciseViewProps> = ({
 
   const computeAndFinishLocally = () => {
     const correctCount = answersRecord.filter(a => a.isCorrect).length;
+    const levelScoreOutOf2 = Math.round(((correctCount / answersRecord.length) * 2) * 10) / 10;
     const scoreOutOf20 = Math.round(((correctCount / answersRecord.length) * 20) * 10) / 10;
     const percentage = Math.round((correctCount / answersRecord.length) * 100);
-    const status: 'VALIDE' | 'REDOUBLE' = scoreOutOf20 >= 12 ? 'VALIDE' : 'REDOUBLE';
+    const status: 'VALIDE' | 'REDOUBLE' = levelScoreOutOf2 >= 1.2 ? 'VALIDE' : 'REDOUBLE';
 
     const fallbackResult: LevelSessionResult = {
       classId: grade,
@@ -243,6 +244,8 @@ export const ExerciseView: React.FC<ExerciseViewProps> = ({
       totalQuestions: answersRecord.length,
       correctAnswers: correctCount,
       incorrectAnswers: answersRecord.length - correctCount,
+      levelScoreOutOf2,
+      subjectTotalScoreOutOf20: 0,
       scoreOutOf20,
       percentage,
       status,

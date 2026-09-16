@@ -11,6 +11,8 @@ export interface SubjectInfo {
   description: string;
   themes: string[];
   color: string;
+  isNew?: boolean; // New subjects introduced in Madagascar curriculum reform (Sept 2026)
+  badgeNote?: string;
 }
 
 export interface Question {
@@ -51,7 +53,9 @@ export interface LevelSessionResult {
   totalQuestions: number;
   correctAnswers: number;
   incorrectAnswers: number;
-  scoreOutOf20: number;
+  levelScoreOutOf2: number; // Isa azon'ny mpianatra amin'ity niveau ity (0 hatramin'ny 2 points)
+  subjectTotalScoreOutOf20: number; // Totalin'ny naoty amin'ny taranja (0 hatramin'ny 20 points)
+  scoreOutOf20: number; // Total subject score out of 20
   percentage: number;
   status: 'VALIDE' | 'REDOUBLE';
   completedAt: string;
@@ -64,13 +68,16 @@ export interface SubjectProgress {
   maxUnlockedLevel: number; // 1 to 10
   totalExercisesDone: number;
   totalCorrect: number;
-  averageScore: number; // /20
+  levelScores: Record<number, number>; // Isa isaky ny niveau (1..10), tsirairay avy dia /2 pts (Total = /20)
+  subjectTotalScore: number; // Fitambaran'ny isa amin'ny taranja (/20)
+  averageScore: number; // Fitambaran'ny isa amin'ny taranja (/20)
   progressionPercent: number; // based on currentLevel / 10
   history: LevelSessionResult[];
 }
 
 export interface StudentProfile {
   id: string;
+  uid?: string;
   fullName: string;
   email: string;
   schoolName: string;
@@ -78,6 +85,9 @@ export interface StudentProfile {
   serieId?: TerminaleSerie;
   createdAt: string;
   lastActive: string;
+  photoURL?: string;
+  isAnonymous?: boolean;
+  authProvider?: string;
   progress: Record<string, SubjectProgress>;
 }
 
