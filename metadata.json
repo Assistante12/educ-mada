@@ -1,6 +1,6 @@
 {
-  "name": "Plateforme Scolaire Madagascar",
-  "description": "Plateforme éducative intelligente d'exercices scolaires pour CM2, 3ème et Terminale (L, S, OSE) selon le programme officiel de Madagascar.",
+  "name": "Educ-Mada | Fanabeazana Malagasy",
+  "description": "Rindranasa fianarana sy fanazaran-tena amin'ny teny Malagasy ho an'ny CM2 (CEPE), 3ème (BEPC) ary Terminale (Bac L, S, OSE) araka ny fandaharam-pianarana ofisialy eto Madagasikara.",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }

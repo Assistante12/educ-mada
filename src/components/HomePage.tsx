@@ -10,9 +10,11 @@ import {
   BookOpen, 
   Layers, 
   FileCheck2,
-  TrendingUp
+  TrendingUp,
+  Download
 } from 'lucide-react';
 import { GradeLevel, TerminaleSerie } from '../types';
+import { PWAInstallButton } from './PWAInstallButton';
 
 interface HomePageProps {
   onStart: () => void;
@@ -35,16 +37,30 @@ export const HomePage: React.FC<HomePageProps> = ({
   return (
     <div className="min-h-[calc(100vh-4rem)] flex flex-col justify-between">
       {/* Hero Section */}
-      <section className="relative overflow-hidden py-12 md:py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full">
+      <section className="relative overflow-hidden py-10 md:py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full">
         {/* Decorative background blurs */}
         <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-emerald-100/50 rounded-full blur-3xl -z-10 pointer-events-none" />
         <div className="absolute top-1/3 right-10 w-72 h-72 bg-red-100/40 rounded-full blur-2xl -z-10 pointer-events-none" />
 
         <div className="text-center max-w-3xl mx-auto space-y-6">
-          {/* Badge */}
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-semibold">
-            <Sparkles className="w-3.5 h-3.5 text-emerald-600" />
-            <span>Fandaharam-pianarana Malagasy Vaovao • MEN Madagascar</span>
+          {/* Official Logo & Flag Badge */}
+          <div className="flex flex-col items-center justify-center gap-3">
+            <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-3xl bg-gradient-to-tr from-emerald-800 to-teal-700 p-2 shadow-xl border-2 border-emerald-500/40 relative group hover:scale-105 transition-transform">
+              <img 
+                src="/icon.svg" 
+                alt="Educ-Mada Official Logo" 
+                className="w-full h-full object-contain filter drop-shadow-md"
+                referrerPolicy="no-referrer"
+              />
+              <span className="absolute -bottom-2 -right-2 bg-red-600 text-white text-[9px] font-black px-2 py-0.5 rounded-full border border-white shadow-xs uppercase">
+                Mada
+              </span>
+            </div>
+
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-bold shadow-2xs">
+              <Sparkles className="w-3.5 h-3.5 text-emerald-600" />
+              <span>Fandaharam-pianarana Malagasy Vaovao • MEN Madagascar</span>
+            </div>
           </div>
 
           {/* Exact Requested Title */}
@@ -56,6 +72,11 @@ export const HomePage: React.FC<HomePageProps> = ({
           <p className="text-base sm:text-lg text-stone-700 font-normal leading-relaxed max-w-2xl mx-auto">
             « Mianara, manaova exercices ary mandrosoa niveau amin'ny alalan'ny exercices générés par intelligence artificielle, mifanaraka amin'ny programme scolaire ankehitriny. »
           </p>
+
+          {/* Direct PWA Installation Banner (Prominent on Home Page) */}
+          <div className="pt-2 max-w-2xl mx-auto">
+            <PWAInstallButton variant="hero" />
+          </div>
 
           {/* Requested Buttons: COMMENCER & SE CONNECTER */}
           <div className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4">
@@ -78,7 +99,7 @@ export const HomePage: React.FC<HomePageProps> = ({
 
           <div className="flex items-center justify-center gap-2 text-xs text-stone-500 pt-1">
             <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-            <span>Base de données Firestore mavitrika • Tahiry an-tserasera azo antoka</span>
+            <span>Rindranasa PWA voatahiry an-toerana sy amin'ny Firestore • 100% azo ampiasaina hors-ligne</span>
           </div>
 
           {/* Feature: Workspace Lesona & Téléchargement PDF */}

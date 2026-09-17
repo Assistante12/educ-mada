@@ -8,12 +8,12 @@ import {
   User,
   Sparkles,
   Cloud,
-  CloudCheck,
   LogIn,
   ShieldCheck
 } from 'lucide-react';
 import { StudentProfile } from '../types';
 import { useAuth } from '../context/AuthContext';
+import { PWAInstallButton } from './PWAInstallButton';
 
 interface HeaderProps {
   student: StudentProfile;
@@ -47,22 +47,27 @@ export const Header: React.FC<HeaderProps> = ({
           <div 
             id="nav-brand"
             onClick={() => onNavigate('home')}
-            className="flex items-center gap-3 cursor-pointer group"
+            className="flex items-center gap-2.5 cursor-pointer group"
           >
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-600 to-teal-500 flex items-center justify-center text-white shadow-sm group-hover:scale-105 transition-transform">
-              <GraduationCap className="w-6 h-6" />
+            <div className="w-10 h-10 rounded-xl bg-emerald-700 p-1 flex items-center justify-center shadow-xs group-hover:scale-105 transition-transform border border-emerald-600">
+              <img 
+                src="/icon.svg" 
+                alt="Educ-Mada Logo" 
+                className="w-full h-full object-contain"
+                referrerPolicy="no-referrer"
+              />
             </div>
             <div>
-              <div className="flex items-center gap-2">
-                <span className="font-bold text-stone-900 tracking-tight text-lg">
-                  Fanabeazana<span className="text-emerald-600">IA</span>
+              <div className="flex items-center gap-1.5">
+                <span className="font-black text-stone-900 tracking-tight text-lg">
+                  Educ<span className="text-emerald-700">-Mada</span>
                 </span>
-                <span className="inline-flex items-center gap-1 text-[10px] uppercase font-bold tracking-wider px-1.5 py-0.5 rounded-sm bg-red-50 text-red-700 border border-red-200">
+                <span className="inline-flex items-center text-[10px] uppercase font-extrabold tracking-wider px-1.5 py-0.5 rounded-md bg-red-50 text-red-700 border border-red-200">
                   Madagascar
                 </span>
               </div>
-              <p className="text-xs text-stone-500 font-medium hidden sm:block">
-                Programme Scolaire Officiel • MEN
+              <p className="text-[11px] text-stone-500 font-medium hidden sm:block">
+                Fanabeazana Malagasy • MEN
               </p>
             </div>
           </div>
@@ -136,6 +141,9 @@ export const Header: React.FC<HeaderProps> = ({
 
           {/* Right actions: Info & Profile / Auth */}
           <div className="flex items-center gap-2">
+            {/* PWA Direct Install Header Button */}
+            <PWAInstallButton variant="header" />
+
             <button
               id="btn-official-info"
               onClick={onOpenCurriculumInfo}

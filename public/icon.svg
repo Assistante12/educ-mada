@@ -1,0 +1,86 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#047857" />
+      <stop offset="50%" stop-color="#065f46" />
+      <stop offset="100%" stop-color="#064e3b" />
+    </linearGradient>
+    <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fde047" />
+      <stop offset="50%" stop-color="#eab308" />
+      <stop offset="100%" stop-color="#ca8a04" />
+    </linearGradient>
+    <linearGradient id="redGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ef4444" />
+      <stop offset="100%" stop-color="#dc2626" />
+    </linearGradient>
+    <filter id="shadow" x="-10%" y="-10%" width="130%" height="130%">
+      <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#000000" flood-opacity="0.35" />
+    </filter>
+  </defs>
+
+  <!-- Base Rounded Background -->
+  <rect width="512" height="512" rx="112" fill="url(#bgGrad)" />
+  
+  <!-- Outer Gold Ring -->
+  <circle cx="256" cy="256" r="218" fill="none" stroke="url(#goldGrad)" stroke-width="6" opacity="0.4" />
+  <circle cx="256" cy="256" r="206" fill="none" stroke="#ffffff" stroke-width="2" stroke-dasharray="8 8" opacity="0.3" />
+
+  <!-- Madagascar Flag Ribbon Accent -->
+  <g transform="translate(256, 92)" filter="url(#shadow)">
+    <!-- Malagasy Flag mini badge -->
+    <rect x="-36" y="-8" width="24" height="28" fill="#ffffff" rx="2" />
+    <rect x="-12" y="-8" width="48" height="14" fill="#dc2626" rx="2" />
+    <rect x="-12" y="6" width="48" height="14" fill="#16a34a" rx="2" />
+    <rect x="-36" y="-8" width="72" height="28" fill="none" stroke="url(#goldGrad)" stroke-width="2" rx="3" />
+  </g>
+
+  <!-- Open Book of Knowledge -->
+  <g transform="translate(256, 290)" filter="url(#shadow)">
+    <!-- Book Spine Glow -->
+    <path d="M 0,-60 L 0,80" stroke="url(#goldGrad)" stroke-width="6" stroke-linecap="round" />
+    
+    <!-- Left Page -->
+    <path d="M 0,-40 C -70,-65 -140,-50 -160,-35 L -160,55 C -140,40 -70,30 0,55 Z" fill="#ffffff" />
+    <path d="M 0,-30 C -65,-55 -130,-42 -150,-28 L -150,45 C -130,32 -65,22 0,45 Z" fill="#f8fafc" />
+    
+    <!-- Right Page -->
+    <path d="M 0,-40 C 70,-65 140,-50 160,-35 L 160,55 C 140,40 70,30 0,55 Z" fill="#ffffff" />
+    <path d="M 0,-30 C 65,-55 130,-42 150,-28 L 150,45 C 130,32 65,22 0,45 Z" fill="#f8fafc" />
+
+    <!-- Text lines on pages -->
+    <line x1="-135" y1="-10" x2="-25" y2="-10" stroke="#059669" stroke-width="4" stroke-linecap="round" opacity="0.7" />
+    <line x1="-130" y1="8" x2="-25" y2="8" stroke="#94a3b8" stroke-width="3.5" stroke-linecap="round" />
+    <line x1="-120" y1="26" x2="-25" y2="26" stroke="#94a3b8" stroke-width="3.5" stroke-linecap="round" />
+
+    <line x1="25" y1="-10" x2="135" y2="-10" stroke="#dc2626" stroke-width="4" stroke-linecap="round" opacity="0.7" />
+    <line x1="25" y1="8" x2="130" y2="8" stroke="#94a3b8" stroke-width="3.5" stroke-linecap="round" />
+    <line x1="25" y1="26" x2="120" y2="26" stroke="#94a3b8" stroke-width="3.5" stroke-linecap="round" />
+  </g>
+
+  <!-- Graduation Cap / Chapeau de Diplôme -->
+  <g transform="translate(256, 175)" filter="url(#shadow)">
+    <!-- Cap Diamond -->
+    <polygon points="0,-48 115,-8 0,32 -115,-8" fill="#1e293b" />
+    <polygon points="0,-40 100,-8 0,24 -100,-8" fill="#0f172a" />
+    <polygon points="0,-48 115,-8 0,32 -115,-8" fill="none" stroke="url(#goldGrad)" stroke-width="3.5" />
+    
+    <!-- Skull Cap Base -->
+    <path d="M -52,14 L -52,44 C -52,65 52,65 52,44 L 52,14 Z" fill="#0f172a" stroke="url(#goldGrad)" stroke-width="2" />
+    
+    <!-- Gold Tassel -->
+    <circle cx="0" cy="-8" r="7" fill="url(#goldGrad)" />
+    <path d="M 0,-8 C 45,6 75,30 75,55" fill="none" stroke="url(#goldGrad)" stroke-width="4" stroke-linecap="round" />
+    <polygon points="70,55 80,55 83,82 67,82" fill="url(#goldGrad)" />
+  </g>
+
+  <!-- Laurel Wreath of Excellence -->
+  <g fill="url(#goldGrad)" opacity="0.9" transform="translate(256, 395)">
+    <!-- Star of Excellence -->
+    <polygon points="0,-18 5,-5 18,-5 8,4 12,17 0,9 -12,17 -8,4 -18,-5 -5,-5" />
+  </g>
+
+  <!-- Bottom Brand Arc Text "EDUC-MADA" -->
+  <text x="256" y="445" text-anchor="middle" fill="#ffffff" font-family="system-ui, -apple-system, sans-serif" font-weight="900" font-size="34" letter-spacing="6">EDUC-MADA</text>
+  <text x="256" y="475" text-anchor="middle" fill="url(#goldGrad)" font-family="system-ui, -apple-system, sans-serif" font-weight="700" font-size="16" letter-spacing="3">FANABEAZANA MALAGASY</text>
+</svg>
