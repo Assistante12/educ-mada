@@ -57,10 +57,12 @@ export const AuthModal: React.FC<AuthModalProps> = ({
     syncStatus 
   } = useAuth();
 
+  const currentDomain = typeof window !== 'undefined' ? window.location.hostname : 'educ-mada.vercel.app';
+  const isCloudAuthReadyDomain = ['localhost', 'run.app', 'web.app', 'firebaseapp.com'].some(d => currentDomain.includes(d));
   const isLocalUser = !currentUser && student?.authProvider === 'local';
 
   const [mode, setMode] = useState<'login' | 'register' | 'profile' | 'local'>(
-    currentUser || isLocalUser ? 'profile' : initialMode
+    currentUser || isLocalUser ? 'profile' : (!isCloudAuthReadyDomain ? 'local' : initialMode)
   );
 
   // Form states
@@ -78,8 +80,6 @@ export const AuthModal: React.FC<AuthModalProps> = ({
   const [successMsg, setSuccessMsg] = useState<string | null>(null);
 
   if (!isOpen) return null;
-
-  const currentDomain = typeof window !== 'undefined' ? window.location.hostname : 'educ-mada.vercel.app';
 
   const resetForm = () => {
     setError(null);
@@ -240,18 +240,18 @@ export const AuthModal: React.FC<AuthModalProps> = ({
     } catch (err: any) {
       console.error('Google Auth Error:', err);
       if (err.code === 'auth/unauthorized-domain') {
-        setError(`Domaine « ${currentDomain} » tsy mbola nankatoavina tao amin'ny Firebase (Authorized Domains)`);
+        setError(`Voafetran'ny Google amin'ity tetikasa Starter ity ny domaine « ${currentDomain} »`);
         setDiagnosticGuide({
-          title: 'Domaine Vercel tsy mbola nankatoavina (auth/unauthorized-domain)',
-          problem: `Ny navigateur dia mandà ny fidirana amin'ny Google satria ny domaine "${currentDomain}" dia mbola tsy tafiditra ao amin'ny lisitry ny Authorized Domains ao amin'ny Firebase Console.`,
-          solutionTitle: 'Fomba famahana azy ao amin\'ny Firebase Console (1 minitra) :',
+          title: 'Tetikasa AI Studio Starter : Tsy azo ampidirina ny domaine Vercel',
+          problem: `Araka ny hita ao amin'ny Firebase Console (« Pour gérer les paramètres, demandez à un propriétaire du projet »), ny rafitra Google AI Studio no tompon'ity tetikasa ity, ka tsy azo ampidirina mivantana ny domaine Vercel.`,
+          solutionTitle: 'Vahaolana tsotra sy miasa avy hatrany 100% :',
           steps: [
-            'Sokafy ny Firebase Console ao amin\'ny Authentication > Settings > Authorized domains.',
-            `Tsindrio ny "Add domain" ary ampidiro: ${currentDomain}`,
-            'Tsindrio ny "Save". Miasa avy hatrany ny fidirana amin\'ny Google aorian\'izay !'
+            'Mampiasà "Kaonty Mpianatra (Mode Local)" : tsy mila Google na tenimiafina.',
+            'Voatahiry ao amin\'ny findainao na solosainao ny naoty rehetra, ny fanazaran-tena ary ny Bulletin Scolaire ofisialy.',
+            'Tsindrio fotsiny ny bokotra maitso eto ambany dia tafiditra avy hatrany ianao !'
           ],
-          consoleUrl: 'https://console.firebase.google.com/project/effortless-rainfall-gf38q/authentication/settings',
-          consoleButtonText: 'Sokafy ny Firebase Settings (Authorized Domains)',
+          consoleUrl: undefined,
+          consoleButtonText: undefined,
           canUseLocal: true
         });
       } else if (err.code === 'auth/popup-blocked') {
@@ -341,6 +341,18 @@ export const AuthModal: React.FC<AuthModalProps> = ({
           ) : (
             <>
               <button
+                id="tab-auth-local"
+                onClick={() => { setMode('local'); resetForm(); }}
+                className={`flex-1 py-2 rounded-lg text-xs font-bold transition-all text-center flex items-center justify-center gap-1 cursor-pointer ${
+                  mode === 'local'
+                    ? 'bg-white text-emerald-800 shadow-xs'
+                    : 'text-stone-600 hover:text-stone-900'
+                }`}
+              >
+                <HardDrive className="w-3.5 h-3.5 text-emerald-600" />
+                <span>Mpianatra (Direct)</span>
+              </button>
+              <button
                 id="tab-auth-login"
                 onClick={() => { setMode('login'); resetForm(); }}
                 className={`flex-1 py-2 rounded-lg text-xs font-bold transition-all text-center flex items-center justify-center gap-1 cursor-pointer ${
@@ -363,18 +375,6 @@ export const AuthModal: React.FC<AuthModalProps> = ({
               >
                 <UserPlus className="w-3.5 h-3.5" />
                 <span>Hisoratra</span>
-              </button>
-              <button
-                id="tab-auth-local"
-                onClick={() => { setMode('local'); resetForm(); }}
-                className={`flex-1 py-2 rounded-lg text-xs font-bold transition-all text-center flex items-center justify-center gap-1 cursor-pointer ${
-                  mode === 'local'
-                    ? 'bg-white text-emerald-800 shadow-xs'
-                    : 'text-stone-600 hover:text-stone-900'
-                }`}
-              >
-                <HardDrive className="w-3.5 h-3.5" />
-                <span>Mode Local</span>
               </button>
             </>
           )}
@@ -825,14 +825,14 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                 type="submit"
                 id="btn-submit-local"
                 disabled={loading}
-                className="w-full mt-2 py-3 px-4 rounded-xl bg-teal-700 hover:bg-teal-800 text-white font-bold text-sm shadow-xs transition-colors flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
+                className="w-full mt-2 py-3 px-4 rounded-xl bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-sm shadow-xs transition-colors flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
               >
                 {loading ? (
                   <Loader2 className="w-4 h-4 animate-spin" />
                 ) : (
                   <>
                     <CheckCircle2 className="w-4 h-4" />
-                    <span>Hiditra amin'ny Mode Local (Maimaimpoana)</span>
+                    <span>Hamorona / Hiditra amin'ny Kaonty Mpianatra</span>
                   </>
                 )}
               </button>
