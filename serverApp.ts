@@ -2,7 +2,8 @@ import express from "express";
 import dotenv from "dotenv";
 import { GoogleGenAI, Type, ThinkingLevel } from "@google/genai";
 import { OFFICIAL_CURRICULUM, LEVEL_CRITERIA, getCurriculumFallbackQuestion } from "./src/data/curriculumData";
-import { GradeLevel, Question, LevelSessionResult } from "./src/types";
+import { getCurriculumLesson, isBogusGenericLesson } from "./src/data/lessonData";
+import { GradeLevel, Question, LevelSessionResult, LessonRemediation } from "./src/types";
 
 dotenv.config();
 
@@ -33,6 +34,9 @@ function withTimeout<T>(promise: Promise<T>, timeoutMs: number, errorMessage = "
     new Promise<T>((_, reject) => setTimeout(() => reject(new Error(errorMessage)), timeoutMs))
   ]);
 }
+
+// In-memory cache for generated lessons to optimize performance and prevent rate-limit exhaustion
+const serverLessonsCache = new Map<string, LessonRemediation>();
 
 // Helper to call Gemini with structured JSON output and specified model
 async function callGeminiModel(
@@ -166,24 +170,33 @@ FEPETRA MAMPAHATSIARO (CRITÈRES STRICTS) :
   try {
     response = await callGeminiModel(ai, "gemini-3.8-flash", systemPrompt, userPrompt, 6000);
   } catch (primaryErr: any) {
+    const isRateLimitOrQuota = 
+      primaryErr?.status === 429 || 
+      primaryErr?.message?.includes("429") || 
+      primaryErr?.message?.includes("RESOURCE_EXHAUSTED") || 
+      primaryErr?.message?.includes("quota") ||
+      primaryErr?.message?.includes("Quota");
+
     const isOverloadedOrUnavailable = primaryErr?.message?.includes("503") || 
       primaryErr?.message?.includes("UNAVAILABLE") || 
       primaryErr?.message?.includes("demand") ||
       primaryErr?.message?.includes("Timeout") ||
       primaryErr?.status === 503;
 
-    if (isOverloadedOrUnavailable) {
-      console.warn("Gemini 3.8-flash currently experiencing high demand/timeout, falling back to gemini-3.1-flash-lite...");
+    if (isRateLimitOrQuota) {
+      console.info("[Exercises AI] Primary model quota reached, trying fallback model...");
+    } else if (isOverloadedOrUnavailable) {
+      console.info("[Exercises AI] Gemini 3.8-flash experiencing high demand/timeout, falling back...");
     } else {
-      console.warn("Primary AI attempt failed:", primaryErr?.message || primaryErr);
+      console.info("[Exercises AI] Primary attempt failed:", primaryErr?.message || "Unavailable");
     }
 
-    // Tier 2: Try Secondary model (gemini-3.1-flash-lite) with 4s timeout
+    // Tier 2: Try Secondary model (gemini-flash-latest) with 4s timeout
     try {
-      activeModel = "gemini-3.1-flash-lite";
-      response = await callGeminiModel(ai, "gemini-3.1-flash-lite", systemPrompt, userPrompt, 4000);
+      activeModel = "gemini-flash-latest";
+      response = await callGeminiModel(ai, "gemini-flash-latest", systemPrompt, userPrompt, 4000);
     } catch (fallbackErr: any) {
-      console.warn("Secondary AI attempt also unavailable, serving verified curriculum question:", fallbackErr?.message || fallbackErr);
+      console.info("[Exercises AI] Secondary AI also unavailable, serving verified curriculum question.");
       response = null;
     }
   }
@@ -287,6 +300,200 @@ apiRouter.post("/exercises/submit-session", (req, res) => {
         : "ATTENTION : REDOUBLE — Note inférieure à 1.2/2 points. Vous devez refaire ce niveau."
     }
   });
+});
+
+// 5. Generate / Fetch Comprehensive Lesson & Remediation Sheet (Workspace Lesoka & Lesona)
+apiRouter.post("/lessons/generate", async (req, res) => {
+  const { classId, serieId, subjectId, level = 1, specificStruggle = "", language = 'fr' } = req.body;
+
+  if (!classId || !subjectId) {
+    res.status(400).json({ error: "classId et subjectId sont obligatoires" });
+    return;
+  }
+
+  const isMalagasySubject = subjectId.toLowerCase().includes('malagasy');
+  const requestedLang: 'fr' | 'mg' = isMalagasySubject ? 'mg' : (language === 'mg' ? 'mg' : 'fr');
+
+  const curriculumObj = OFFICIAL_CURRICULUM[classId as GradeLevel];
+  let subjectInfo = curriculumObj?.subjects?.find(s => s.id === subjectId);
+  if (!subjectInfo && curriculumObj?.series && serieId) {
+    const serieObj = curriculumObj.series.find(s => s.id === serieId);
+    subjectInfo = serieObj?.subjects.find(s => s.id === subjectId);
+  }
+
+  const subjectName = subjectInfo ? subjectInfo.name : subjectId;
+  const themesList = subjectInfo ? subjectInfo.themes.join(", ") : "Programme officiel";
+  const levelInfo = LEVEL_CRITERIA[level] || LEVEL_CRITERIA[1];
+
+  const cacheKey = `${classId}_${serieId || 'all'}_${subjectId}_lvl${level}_${requestedLang}`;
+  if (!specificStruggle && serverLessonsCache.has(cacheKey)) {
+    const cached = serverLessonsCache.get(cacheKey);
+    if (cached && !isBogusGenericLesson(cached)) {
+      res.json({ lesson: cached, mode: "firestore_cache" });
+      return;
+    } else {
+      serverLessonsCache.delete(cacheKey);
+    }
+  }
+
+  const ai = getGenAI();
+
+  if (!ai) {
+    const fallbackLesson = getCurriculumLesson(classId, subjectId, level, serieId, requestedLang);
+    if (!isBogusGenericLesson(fallbackLesson)) {
+      serverLessonsCache.set(cacheKey, fallbackLesson);
+    }
+    res.json({ lesson: fallbackLesson, mode: "curriculum_fallback", note: "API key not configured" });
+    return;
+  }
+
+  const systemPrompt = `
+Vous êtes un professeur émérite et inspecteur pédagogique de référence du Ministère de l'Éducation Nationale de Madagascar (MEN).
+Vous concevez des fiches de cours officielles approfondies, claires et exhaustives pour les candidats (CEPE, BEPC, BACCALAURÉAT).
+
+RÈGLES CAPITALES DE RÉDACTION ET DE MISE EN FORME :
+1. LANGUE OFFICIELLE OBLIGATOIRE :
+${requestedLang === 'fr' 
+  ? '- Rédigez l\'INTÉGRALITÉ du cours (titre, objectifs, cours théorique, erreurs fréquentes, méthodologie, exemple résolu pas à pas) en FRANÇAIS, langue officielle d\'évaluation aux examens nationaux malgaches pour cette matière.'
+  : '- Rédigez l\'intégralité du cours en MALAGASY (Fiteny Reny) selon les normes académiques officielles de Madagascar.'}
+
+2. NOTATION MATHÉMATIQUE ET SCIENTIFIQUE STRICTE (INTERDICTION DU STYLE CODE INFORMATIQUE) :
+- INTERDICTION FORMELLE d'utiliser le caractère '*' pour exprimer une multiplication. Utilisez EXCLUSIVEMENT le signe typographique officiel '×' (ex: 24 × 5 = 120, P = m × g, U = R × I, ou LaTeX \\times).
+- INTERDICTION FORMELLE d'utiliser la barre oblique simple '/' pour représenter une division arithmétique. Utilisez EXCLUSIVEMENT le signe officiel '÷' (ex: 120 ÷ 4 = 30) ou une fraction bien formée en notation LaTeX (ex: \\frac{a}{b} ou v = d ÷ t).
+- Rédigez des formules avec clarté professionnelle, unités du Système International (m, s, kg, N, W, V, A, J), et étapes détaillées.
+
+3. INTERDICTION DES CONSEILS GÉNÉRIQUES VIDES :
+- TSY TOROLÀLANA ANKAPOBENY MOMBA NY FOMBA FIANARANA NO ILAINA.
+- Fournissez un VRAI COURS DIDACTIQUE SUBSTANTIEL : définitions exactes, théorèmes, lois scientifiques, formules complètes expliquées, et un EXEMPLE D'APPLICATION RÉSOLU PAS À PAS avec de vrais calculs numériques et la solution finale encadrée.
+
+CADRE OFFICIEL DU MINISTÈRE (MEN MADAGASCAR) :
+- Classe : ${classId} ${serieId ? `(${serieId})` : ''}
+- Matière : ${subjectName}
+- Chapitre officiel : ${themesList}
+- Niveau d'approfondissement : Niveau ${level} / 10 (${levelInfo.title})
+${specificStruggle ? `- Question ou point particulier soulevé par l'élève : "${specificStruggle}"` : ''}
+`;
+
+  const userPrompt = requestedLang === 'fr'
+    ? `Rédigez le cours officiel complet (avec définitions, formules utilisant « × » et « ÷ », et un exemple résolu pas à pas) pour la matière ${subjectName}, Classe ${classId} ${serieId || ''}, Niveau ${level}/10.`
+    : `Ataovy fikarohana sy famelabelarana ny tena LESONA MIVAINGANA (Résumé complet + Fanazavana sy Raikipohy mampiasa « × » sy « ÷ » + Exemple amin'ny fanaovana azy) ho an'ny ${subjectName}, Kilasy ${classId} ${serieId || ''}, Niveau ${level}/10.`;
+
+  let response: any = null;
+  const modelsToTry = ["gemini-3.8-flash", "gemini-flash-latest"];
+
+  for (const modelName of modelsToTry) {
+    try {
+      response = await withTimeout(
+        ai.models.generateContent({
+          model: modelName,
+          contents: [{ role: "user", parts: [{ text: userPrompt }] }],
+          config: {
+            systemInstruction: systemPrompt,
+            temperature: 0.5,
+            thinkingConfig: { thinkingLevel: ThinkingLevel.LOW },
+            responseMimeType: "application/json",
+            responseSchema: {
+              type: Type.OBJECT,
+              properties: {
+                title: { type: Type.STRING },
+                theme: { type: Type.STRING },
+                objectives: { type: Type.ARRAY, items: { type: Type.STRING } },
+                coreTheory: { type: Type.ARRAY, items: { type: Type.STRING } },
+                commonMistakes: {
+                  type: Type.ARRAY,
+                  items: {
+                    type: Type.OBJECT,
+                    properties: {
+                      mistake: { type: Type.STRING },
+                      explanation: { type: Type.STRING },
+                      correction: { type: Type.STRING }
+                    },
+                    required: ["mistake", "explanation", "correction"]
+                  }
+                },
+                methodology: { type: Type.ARRAY, items: { type: Type.STRING } },
+                solvedExample: {
+                  type: Type.OBJECT,
+                  properties: {
+                    problem: { type: Type.STRING },
+                    steps: { type: Type.ARRAY, items: { type: Type.STRING } },
+                    finalAnswer: { type: Type.STRING }
+                  },
+                  required: ["problem", "steps", "finalAnswer"]
+                },
+                keyTakeaways: { type: Type.ARRAY, items: { type: Type.STRING } },
+                officialReference: { type: Type.STRING }
+              },
+              required: ["title", "theme", "objectives", "coreTheory", "commonMistakes", "methodology", "solvedExample", "keyTakeaways", "officialReference"]
+            }
+          }
+        }),
+        7000,
+        `Lesson AI timeout on ${modelName}`
+      );
+      if (response) break;
+    } catch (err: any) {
+      const isRateLimitOrQuota =
+        err?.status === 429 ||
+        err?.message?.includes("429") ||
+        err?.message?.includes("RESOURCE_EXHAUSTED") ||
+        err?.message?.includes("quota") ||
+        err?.message?.includes("Quota");
+
+      if (isRateLimitOrQuota) {
+        console.info(`[Lesson AI] Model ${modelName} quota reached. Checking fallback options...`);
+      } else {
+        console.info(`[Lesson AI] Model ${modelName} unavailable: ${err?.message || "Error"}`);
+      }
+    }
+  }
+
+  if (response) {
+    try {
+      const jsonText = response.text?.trim() || "{}";
+      const parsed = JSON.parse(jsonText);
+
+      if (parsed.title && Array.isArray(parsed.coreTheory)) {
+        const lesson: LessonRemediation = {
+          id: `ai_les_${classId}_${subjectId}_lvl${level}_${Date.now()}`,
+          classId,
+          serieId,
+          subjectId,
+          subjectName,
+          level,
+          title: parsed.title,
+          theme: parsed.theme || "Programme Officiel",
+          objectives: parsed.objectives || [],
+          coreTheory: parsed.coreTheory || [],
+          commonMistakes: parsed.commonMistakes || [],
+          methodology: parsed.methodology || [],
+          solvedExample: parsed.solvedExample || { problem: "", steps: [], finalAnswer: "" },
+          keyTakeaways: parsed.keyTakeaways || [],
+          officialReference: parsed.officialReference || `Programme Officiel MEN Madagascar - ${classId}`,
+          language: requestedLang
+        };
+
+        if (!isBogusGenericLesson(lesson)) {
+          if (!specificStruggle) {
+            serverLessonsCache.set(cacheKey, lesson);
+          }
+          res.json({ lesson, mode: "ai_generated" });
+          return;
+        } else {
+          console.warn("[Lesson AI] Model generated generic guidelines rather than authentic lesson. Switching to verified curriculum.");
+        }
+      }
+    } catch (parseErr) {
+      console.info("[Lesson AI] JSON parsing error, serving verified curriculum fallback.");
+    }
+  }
+
+  // Fallback to verified curriculum lesson
+  const fallbackLesson = getCurriculumLesson(classId, subjectId, level, serieId, requestedLang);
+  if (!specificStruggle && !isBogusGenericLesson(fallbackLesson)) {
+    serverLessonsCache.set(cacheKey, fallbackLesson);
+  }
+  res.json({ lesson: fallbackLesson, mode: "curriculum_fallback" });
 });
 
 // Dual mounting: matches both `/api/...` and `/...` for flexible hosting (Vercel Serverless, Express, Render)

@@ -15,6 +15,7 @@ import {
 } from 'lucide-react';
 import { GradeLevel, TerminaleSerie, SubjectInfo, Question, AnswerRecord, LevelSessionResult } from '../types';
 import { getCurriculumFallbackQuestion } from '../data/curriculumData';
+import { MathText } from './MathText';
 
 interface ExerciseViewProps {
   grade: GradeLevel;
@@ -374,7 +375,7 @@ export const ExerciseView: React.FC<ExerciseViewProps> = ({
 
             {/* Question Text */}
             <h3 className="text-lg sm:text-xl font-bold text-stone-900 leading-relaxed mb-6">
-              {currentQuestion.question}
+              <MathText text={currentQuestion.question} />
             </h3>
 
             {/* Timeout alert banner */}
@@ -434,7 +435,7 @@ export const ExerciseView: React.FC<ExerciseViewProps> = ({
                         {optionLetters[idx]}
                       </span>
                       <span className="text-sm font-medium leading-normal">
-                        {opt}
+                        <MathText text={opt} />
                       </span>
                     </div>
 
@@ -500,9 +501,9 @@ export const ExerciseView: React.FC<ExerciseViewProps> = ({
                     <span className="font-bold text-stone-900 block mb-1">
                       Fanazavana sy Fomba Fiasa (Méthode de résolution) :
                     </span>
-                    <p className="whitespace-pre-line">
-                      {currentQuestion.explanation}
-                    </p>
+                    <div className="whitespace-pre-line">
+                      <MathText text={currentQuestion.explanation} />
+                    </div>
                   </div>
                 </div>
 

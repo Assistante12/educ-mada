@@ -9,9 +9,10 @@ import {
   FileText, 
   Clock, 
   Sparkles,
-  AlertTriangle
+  AlertTriangle,
+  BookOpen
 } from 'lucide-react';
-import { LevelSessionResult } from '../types';
+import { LevelSessionResult, GradeLevel, TerminaleSerie } from '../types';
 
 interface LevelResultModalProps {
   result: LevelSessionResult;
@@ -19,6 +20,8 @@ interface LevelResultModalProps {
   onRetryLevel: () => void;
   onGoToSubjects: () => void;
   onViewBulletin: () => void;
+  onOpenLesonaWorkspace?: (grade: GradeLevel, subjectId: string, level: number, serie?: TerminaleSerie) => void;
+  onOpenLesokaWorkspace?: (grade: GradeLevel, subjectId: string, level: number, serie?: TerminaleSerie) => void;
 }
 
 export const LevelResultModal: React.FC<LevelResultModalProps> = ({
@@ -27,7 +30,10 @@ export const LevelResultModal: React.FC<LevelResultModalProps> = ({
   onRetryLevel,
   onGoToSubjects,
   onViewBulletin,
+  onOpenLesonaWorkspace,
+  onOpenLesokaWorkspace,
 }) => {
+  const handleOpenWorkspace = onOpenLesonaWorkspace || onOpenLesokaWorkspace;
   const isPassed = result.status === 'VALIDE';
   const levelPts = typeof result.levelScoreOutOf2 === 'number'
     ? result.levelScoreOutOf2
@@ -195,6 +201,17 @@ export const LevelResultModal: React.FC<LevelResultModalProps> = ({
             >
               <RotateCcw className="w-4 h-4" />
               <span>Averina lalaovina ity Niveau ity</span>
+            </button>
+          )}
+
+          {handleOpenWorkspace && (
+            <button
+              id="btn-modal-open-lesona"
+              onClick={() => handleOpenWorkspace(result.classId, result.subjectId, result.level, result.serieId)}
+              className="w-full py-2.5 px-3 bg-teal-50 hover:bg-teal-100 text-teal-800 border border-teal-200 font-bold rounded-xl text-xs transition-colors cursor-pointer flex items-center justify-center gap-2"
+            >
+              <BookOpen className="w-4 h-4 text-teal-600" />
+              <span>Hijery ny Lesona mifanaraka amin'ity (Cours & PDF)</span>
             </button>
           )}
 

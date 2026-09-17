@@ -44,6 +44,13 @@ interface AuthContextType {
       serieId?: TerminaleSerie;
     }
   ) => Promise<void>;
+  registerLocalAccount: (profileData: {
+    fullName: string;
+    schoolName: string;
+    classId: GradeLevel;
+    serieId?: TerminaleSerie;
+    email?: string;
+  }) => StudentProfile;
   loginWithGoogle: (preferredClass?: GradeLevel, preferredSerie?: TerminaleSerie) => Promise<void>;
   logout: () => Promise<void>;
   updateStudentProfile: (
@@ -233,6 +240,32 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   };
 
+  const registerLocalAccount = (profileData: {
+    fullName: string;
+    schoolName: string;
+    classId: GradeLevel;
+    serieId?: TerminaleSerie;
+    email?: string;
+  }): StudentProfile => {
+    const current = getStoredStudent();
+    const updated: StudentProfile = {
+      ...current,
+      id: current.id && !current.id.startsWith('guest_') ? current.id : `local_${Date.now()}`,
+      uid: current.uid && !current.uid.startsWith('guest_') ? current.uid : `local_${Date.now()}`,
+      email: profileData.email || current.email || (profileData.fullName ? `${profileData.fullName.toLowerCase().replace(/\s+/g, '')}@local.mada` : 'mpianatra@local.mada'),
+      fullName: profileData.fullName || current.fullName || 'Mpianatra Malagasy',
+      schoolName: profileData.schoolName || current.schoolName || 'Lycée / Collège / EPP Madagascar',
+      classId: profileData.classId || current.classId || 'Terminale',
+      serieId: profileData.classId === 'Terminale' ? (profileData.serieId || current.serieId || 'Série S') : undefined,
+      authProvider: 'local',
+      lastActive: new Date().toISOString()
+    };
+    saveStudent(updated);
+    setStudent(updated);
+    setSyncStatus('offline');
+    return updated;
+  };
+
   const loginWithGoogle = async (preferredClass?: GradeLevel, preferredSerie?: TerminaleSerie) => {
     const result = await signInWithPopup(auth, googleProvider);
     if (result.user) {
@@ -330,6 +363,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         syncStatus,
         loginWithEmail,
         registerWithEmail,
+        registerLocalAccount,
         loginWithGoogle,
         logout,
         updateStudentProfile,

@@ -10,6 +10,7 @@ import { StudentDashboard } from './components/StudentDashboard';
 import { BulletinView } from './components/BulletinView';
 import { AuthModal } from './components/AuthModal';
 import { CurriculumInfoModal } from './components/CurriculumInfoModal';
+import { LesonaWorkspace } from './components/LesonaWorkspace';
 import { 
   GradeLevel, 
   TerminaleSerie, 
@@ -33,6 +34,10 @@ function AppContent() {
   const [activeSubject, setActiveSubject] = useState<SubjectInfo | null>(null);
   const [activeLevel, setActiveLevel] = useState<number>(1);
   const [sessionResult, setSessionResult] = useState<LevelSessionResult | null>(null);
+
+  // Lesona Workspace selection tracking
+  const [lesonaSubjectId, setLesonaSubjectId] = useState<string>('math');
+  const [lesonaLevel, setLesonaLevel] = useState<number>(1);
 
   // Modals state
   const [isAuthModalOpen, setIsAuthModalOpen] = useState<boolean>(false);
@@ -120,6 +125,8 @@ function AppContent() {
             onLogin={() => setIsAuthModalOpen(true)}
             onSelectClass={handleSelectClassFromHome}
             onOpenCurriculumInfo={() => setIsCurriculumModalOpen(true)}
+            onOpenLesona={() => handleNavigate('lesona')}
+            onOpenLesoka={() => handleNavigate('lesona')}
           />
         )}
 
@@ -175,6 +182,24 @@ function AppContent() {
             onBack={() => setCurrentView('dashboard')}
           />
         )}
+
+        {(currentView === 'lesona' || currentView === 'lesoka') && (
+          <LesonaWorkspace
+            initialGrade={student.classId}
+            initialSerie={student.serieId}
+            initialSubjectId={lesonaSubjectId}
+            initialLevel={lesonaLevel}
+            onSwitchToExercises={async (grade, sub, lvl, serie) => {
+              await updateStudentProfile(
+                student.fullName,
+                student.schoolName,
+                grade,
+                serie
+              );
+              handleStartLevel(sub, lvl);
+            }}
+          />
+        )}
       </main>
 
       {/* Level Result Modal with strict 12/20 rule decision */}
@@ -190,6 +215,18 @@ function AppContent() {
           onViewBulletin={() => {
             setSessionResult(null);
             setCurrentView('bulletin');
+          }}
+          onOpenLesonaWorkspace={(grade, subjectId, level, serie) => {
+            setLesonaSubjectId(subjectId);
+            setLesonaLevel(level);
+            setSessionResult(null);
+            setCurrentView('lesona');
+          }}
+          onOpenLesokaWorkspace={(grade, subjectId, level, serie) => {
+            setLesonaSubjectId(subjectId);
+            setLesonaLevel(level);
+            setSessionResult(null);
+            setCurrentView('lesona');
           }}
         />
       )}

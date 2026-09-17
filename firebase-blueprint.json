@@ -39,6 +39,31 @@
         "updatedAt": { "type": "string" }
       },
       "required": ["userId", "subjectKey", "maxUnlockedLevel"]
+    },
+    "Lesson": {
+      "title": "Curriculum Lesson Sheet",
+      "description": "Comprehensive curriculum lesson and structured explanations cached from AI research",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "classId": { "type": "string" },
+        "serieId": { "type": "string" },
+        "subjectId": { "type": "string" },
+        "subjectName": { "type": "string" },
+        "level": { "type": "number" },
+        "title": { "type": "string" },
+        "theme": { "type": "string" },
+        "objectives": { "type": "array" },
+        "coreTheory": { "type": "array" },
+        "commonMistakes": { "type": "array" },
+        "methodology": { "type": "array" },
+        "solvedExample": { "type": "object" },
+        "keyTakeaways": { "type": "array" },
+        "officialReference": { "type": "string" },
+        "source": { "type": "string" },
+        "cachedAt": { "type": "string" }
+      },
+      "required": ["id", "classId", "subjectId", "level", "title", "theme", "coreTheory"]
     }
   },
   "firestore": {
@@ -49,6 +74,10 @@
     "/users/{userId}/progress/{subjectKey}": {
       "schema": "StudentProgress",
       "description": "Subcollection storing academic scores and level progression for each subject"
+    },
+    "/lessons/{lessonId}": {
+      "schema": "Lesson",
+      "description": "Collection storing cached curriculum lessons so AI research is only done once and shared with all students"
     }
   }
 }

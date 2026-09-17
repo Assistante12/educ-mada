@@ -8,5 +8,12 @@ service cloud.firestore {
         allow read, write: if request.auth != null && request.auth.uid == userId;
       }
     }
+
+    match /lessons/{lessonId} {
+      // Lessons are public educational resources that any student can read
+      allow read: if true;
+      // Lessons can be created or updated when generated to cache for subsequent students
+      allow write: if true;
+    }
   }
 }

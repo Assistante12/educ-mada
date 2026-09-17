@@ -1,6 +1,6 @@
 import { doc, getDoc, setDoc, collection, getDocs, updateDoc } from 'firebase/firestore';
 import { db, FirebaseUser } from './firebase';
-import { StudentProfile, SubjectProgress, GradeLevel, TerminaleSerie } from '../types';
+import { StudentProfile, SubjectProgress, GradeLevel, TerminaleSerie, LessonRemediation } from '../types';
 
 export interface FirestoreUserProfile {
   uid: string;
@@ -172,3 +172,108 @@ export async function uploadLocalProgressToFirestore(
     console.error('Error uploading local progress to Firestore:', err);
   }
 }
+
+/**
+ * Check if a lesson is an obsolete generic guideline placeholder
+ * (e.g. contains boilerplate advice instead of actual subject lesson content)
+ */
+export function isBogusGenericLesson(lesson: LessonRemediation | null | undefined): boolean {
+  if (!lesson) return true;
+  const theoryStr = Array.isArray(lesson.coreTheory) ? lesson.coreTheory.join(' ') : '';
+  const mistakeStr = Array.isArray(lesson.commonMistakes) ? JSON.stringify(lesson.commonMistakes) : '';
+  const methodStr = Array.isArray(lesson.methodology) ? lesson.methodology.join(' ') : '';
+  const exampleStr = typeof lesson.solvedExample === 'object' ? JSON.stringify(lesson.solvedExample) : '';
+
+  if (
+    theoryStr.includes("Tsy maintsy fantarina mialoha ny hevitra fototra") ||
+    theoryStr.includes("Ampiasao ara-dalàna ny fomba fiasa nomena") ||
+    mistakeStr.includes("Firosoana avy hatrany amin'ny valiny tsy misy famakafakana") ||
+    mistakeStr.includes("Omeo 2 minitra foana ny tenanao hamarinana") ||
+    methodStr.includes("Dingana 1 : Fakafakao ny angon-drakitra sy ny zava-kendrena") ||
+    exampleStr.includes("Valiny marina sy voadinika manaraka ny marika ofisialy") ||
+    exampleStr.includes("Famaritana ny fepetra sy ny zavatra fantatra ao amin'ny lesona")
+  ) {
+    return true;
+  }
+  return false;
+}
+
+/**
+ * Generate a clean document ID for Firestore caching of lessons
+ */
+export function getLessonDocId(
+  classId: GradeLevel,
+  subjectId: string,
+  level: number,
+  serieId?: TerminaleSerie,
+  language: 'fr' | 'mg' = 'fr'
+): string {
+  const cleanSerie = serieId ? serieId.replace(/[^a-zA-Z0-9]/g, '_') : 'all';
+  const cleanClass = classId.replace(/[^a-zA-Z0-9]/g, '_');
+  const cleanSubject = subjectId.replace(/[^a-zA-Z0-9]/g, '_');
+  return `lesson_${cleanClass}_${cleanSerie}_${cleanSubject}_lvl${level}_${language}`;
+}
+
+/**
+ * Fetch a cached lesson from Firestore
+ * Returns null if not cached yet or if cached copy is an obsolete placeholder.
+ */
+export async function getCachedLessonFromFirestore(
+  classId: GradeLevel,
+  subjectId: string,
+  level: number,
+  serieId?: TerminaleSerie,
+  language: 'fr' | 'mg' = 'fr'
+): Promise<LessonRemediation | null> {
+  try {
+    const docId = getLessonDocId(classId, subjectId, level, serieId, language);
+    const docRef = doc(db, 'lessons', docId);
+    const snap = await getDoc(docRef);
+
+    if (snap.exists()) {
+      const data = snap.data() as LessonRemediation;
+      if (isBogusGenericLesson(data)) {
+        console.warn(`[Firestore Cache Hit] Found obsolete generic placeholder in ${docId}. Ignoring.`);
+        return null;
+      }
+      console.log(`[Firestore Cache Hit] Found verified cached lesson: ${docId}`);
+      return {
+        ...data,
+        source: 'firestore_cache'
+      };
+    }
+  } catch (err) {
+    console.warn('[Firestore Cache Check] Error querying cached lesson:', err);
+  }
+  return null;
+}
+
+/**
+ * Save an AI-generated or official curriculum lesson directly to Firestore
+ * so future requests load immediately from the database without invoking AI.
+ */
+export async function saveLessonToFirestore(lesson: LessonRemediation): Promise<void> {
+  if (isBogusGenericLesson(lesson)) {
+    console.warn('[Firestore Cache Save] Refusing to save generic placeholder.');
+    return;
+  }
+
+  try {
+    const lang = lesson.language || (lesson.subjectId.toLowerCase().includes('malagasy') ? 'mg' : 'fr');
+    const docId = getLessonDocId(lesson.classId, lesson.subjectId, lesson.level, lesson.serieId, lang);
+    const docRef = doc(db, 'lessons', docId);
+
+    const dataToSave = {
+      ...lesson,
+      language: lang,
+      cachedAt: new Date().toISOString(),
+      source: 'firestore_cache'
+    };
+
+    await setDoc(docRef, dataToSave, { merge: true });
+    console.log(`[Firestore Cache Save] Successfully saved lesson to Firestore: ${docId}`);
+  } catch (err) {
+    console.warn('[Firestore Cache Save] Failed to save lesson to Firestore:', err);
+  }
+}
+

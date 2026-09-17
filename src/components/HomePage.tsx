@@ -19,6 +19,8 @@ interface HomePageProps {
   onLogin: () => void;
   onSelectClass: (grade: GradeLevel, serie?: TerminaleSerie) => void;
   onOpenCurriculumInfo: () => void;
+  onOpenLesona?: () => void;
+  onOpenLesoka?: () => void;
 }
 
 export const HomePage: React.FC<HomePageProps> = ({
@@ -26,7 +28,10 @@ export const HomePage: React.FC<HomePageProps> = ({
   onLogin,
   onSelectClass,
   onOpenCurriculumInfo,
+  onOpenLesona,
+  onOpenLesoka,
 }) => {
+  const handleOpenWorkspace = onOpenLesona || onOpenLesoka;
   return (
     <div className="min-h-[calc(100vh-4rem)] flex flex-col justify-between">
       {/* Hero Section */}
@@ -75,6 +80,30 @@ export const HomePage: React.FC<HomePageProps> = ({
             <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
             <span>Base de données Firestore mavitrika • Tahiry an-tserasera azo antoka</span>
           </div>
+
+          {/* Feature: Workspace Lesona & Téléchargement PDF */}
+          {handleOpenWorkspace && (
+            <div className="pt-3">
+              <div 
+                id="banner-workspace-lesona-hero"
+                onClick={handleOpenWorkspace}
+                className="inline-flex flex-col sm:flex-row items-center gap-3 p-3 sm:px-5 sm:py-3 bg-gradient-to-r from-teal-900 via-emerald-900 to-slate-900 text-white rounded-2xl shadow-md hover:shadow-lg transition-all transform hover:-translate-y-0.5 cursor-pointer border border-teal-500/30"
+              >
+                <div className="flex items-center gap-2.5">
+                  <span className="px-2.5 py-1 bg-teal-500 text-slate-950 font-black rounded-lg text-xs uppercase tracking-wider">
+                    Vaovao
+                  </span>
+                  <span className="text-sm font-bold text-teal-100">
+                    Workspace Lesona : Lesona manazava mifanaraka amin'ny fandaharam-pianarana MEN (miaraka amin'ny PDF)
+                  </span>
+                </div>
+                <div className="flex items-center gap-1.5 text-xs text-teal-300 font-semibold underline underline-offset-4">
+                  <span>Hiditra handalina & Haka PDF</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </div>
+              </div>
+            </div>
+          )}
         </div>
 
         {/* 3 Main Target Classes Cards */}

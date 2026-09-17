@@ -4,6 +4,44 @@ Ity rafitra ity dia efa namboarina sy nalamina manokana mba ho azo alefa mivanta
 
 ---
 
+## 🔑 ZAVA-DEHIBE HO AN'I VERCEL (https://educ-mada.vercel.app/) : Fampandehanana ny Firebase Auth
+
+Rehefa voa-déployer ao amin'ny Vercel ny tranonkala (`https://educ-mada.vercel.app/`), dia misy **dingana 2 tsotra sy haingana** (latsaky ny 1 minitra) tsy maintsy atao ao amin'ny **Firebase Console** mba hahamatihanina sy hahafahana mampiasa ny fidirana amin'ny **Google** sy ny **Email** :
+
+### 1. Fampidirana ny Domaine Vercel ao amin'ny Authorized Domains (Ho an'ny Google Sign-In)
+Manakana ny fidirana amin'ny Google OAuth ny navigateur raha tsy tafiditra ao amin'ny lisitry ny Authorized Domains ny domain anao :
+1. Sokafy mivantana ny Firebase Console :
+   👉 **[https://console.firebase.google.com/project/effortless-rainfall-gf38q/authentication/settings](https://console.firebase.google.com/project/effortless-rainfall-gf38q/authentication/settings)**
+2. Tsindrio ny tab **"Settings"** (eo ambony ankavanana) ➔ **"Authorized domains"**.
+3. Tsindrio ny bokotra manga **"Add domain"**.
+4. Ampidiro ao ny :
+   ```
+   educ-mada.vercel.app
+   ```
+5. Tsindrio ny **"Save"**.
+> **Vokatr'izany :** Mandeha 100% avy hatrany ny fidirana amin'ny Google (« Midira amin'ny Google ») eo no ho eo tsy misy fahadisoana intsony !
+
+---
+
+### 2. Famelomana ny Email/Password ao amin'ny Sign-in Providers (Ho an'ny Fisoratana anarana amin'ny Email)
+Ao amin'ny Firebase vaovao dia tsy maintsy velomina (activer) ny safidy Email/Password :
+1. Sokafy mivantana ny Sign-in providers ao amin'ny Firebase Console :
+   👉 **[https://console.firebase.google.com/project/effortless-rainfall-gf38q/authentication/providers](https://console.firebase.google.com/project/effortless-rainfall-gf38q/authentication/providers)**
+2. Ao amin'ny **"Sign-in method"**, kitiho ny **"Email/Password"**.
+3. Velomy (kitiho ho mavitrika / **Enable**) ny safidy voalohany : **"Email/Password"**.
+4. Tsindrio ny **"Save"**.
+> **Vokatr'izany :** Afaka mamorona kaonty amin'ny alalan'ny adiresy mailaka sy tenimiafina avy hatrany ny mpianatra rehetra !
+
+---
+
+### 3. Fitaovana Vonjy Maika : « Mode Local / Hors-ligne » (Efa nampidirina ao anaty App)
+Raha mbola tsy vita ireo fanovana ao amin'ny Firebase Console ireo, na ho an'ireo mpianatra manana fahasahiranana amin'ny Internet :
+- Efa nampidirina ao amin'ny fampiharana ny **« Mode Local »**.
+- Afaka tsindrina avy hatrany ny **"Mode Local"** na **"Tohizo amin'ny Mode Local"** ao amin'ny Modal fidirana.
+- Tsy mila tenimiafina ary tsy misy erreur mihitsy : voatahiry ao amin'ny navigateur avy hatrany ny naoty sy ny fivoaran'ny mpianatra, ary afaka ampifandraisina amin'ny Google na Firebase any aoriana.
+
+---
+
 ## 🚀 Safidy 1 : Famoahana any amin'i VERCEL (Recommandé ho an'ny Serverless)
 
 Vercel dia mandray mivantana ny Frontend Vite sy ny API Serverless amin'ny alalan'ny rakitra `vercel.json` sy `api/index.ts` efa voaomana.
@@ -34,7 +72,7 @@ Vercel dia mandray mivantana ny Frontend Vite sy ny API Serverless amin'ny alala
 
 5. **Deploy :**
    - Tsindrio ny bokotra **"Deploy"**.
-   - Rehefa afaka 1 hatramin'ny 2 minitra dia hisy rohy ofisialy (ohatra: `https://plateforme-scolaire-madagascar.vercel.app`) azon'ny rehetra idirana.
+   - Rehefa afaka 1 hatramin'ny 2 minitra dia hisy rohy ofisialy (ohatra: `https://educ-mada.vercel.app`) azon'ny rehetra idirana.
 
 ---
 
@@ -70,15 +108,4 @@ Render dia mampandeha mivantana ny server Express Node.js miaraka amin'ny Fronte
 ## 🔒 Fanamarihana momba ny Firebase (Auth & Firestore Database)
 
 - Ny rakitra `firebase-applet-config.json` dia efa tafiditra ao anatin'ny tetikasa ary efa mifandray mivantana amin'ny Firebase Firestore sy Authentication.
-- Noho izany, na any amin'i Vercel na any amin'i Render dia mandeha avy hatrany ny fisoratana anarana, ny fidirana (login), ary ny fitehirizana ny naotin'ny mpianatra.
-- Raha te hampiasa projet Firebase vaovao ianao any aoriana, soloy fotsiny ny sandan'ny `firebase-applet-config.json` na ampiasao ny `import.meta.env`.
-
----
-
-## 🧪 Fanamarinana aorian'ny fandefasana (Vérification)
-
-Rehefa tafapetraka ny tranonkala :
-1. Sokafy ny rohy nomena (URL).
-2. Mandehana amin'ny `/api/health` mba hanamarinana fa miasa tsara ny Backend (`{"status":"ok",...}`).
-3. Andramo ny mamorona fanontaniana sy manao fanadinana.
-4. Andramo ny misoratra anarana sy miditra mba hanamarinana ny Firebase.
+- Efa napetraka sy navoaka ao amin'ny Firebase Firestore ihany koa ny **Security Rules** (`firestore.rules`) hahafahan'ny mpianatra mamaky lesona sy mitahiry ny naotiny soa aman-tsara.

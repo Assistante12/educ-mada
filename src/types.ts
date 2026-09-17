@@ -109,3 +109,34 @@ export interface BulletinData {
   totalQuestionsCompleted: number;
   totalCorrectAnswers: number;
 }
+
+export interface CommonMistake {
+  mistake: string;
+  explanation: string;
+  correction: string;
+}
+
+export interface LessonRemediation {
+  id: string;
+  classId: GradeLevel;
+  serieId?: TerminaleSerie;
+  subjectId: string;
+  subjectName: string;
+  level: number;
+  title: string;
+  theme: string;
+  objectives: string[];
+  coreTheory: string[];
+  commonMistakes: CommonMistake[];
+  methodology: string[];
+  solvedExample: {
+    problem: string;
+    steps: string[];
+    finalAnswer: string;
+  };
+  keyTakeaways: string[];
+  officialReference: string;
+  language?: 'fr' | 'mg';
+  source?: 'firestore_cache' | 'ai_generated' | 'curriculum_fallback' | 'curriculum_database';
+  cachedAt?: string;
+}

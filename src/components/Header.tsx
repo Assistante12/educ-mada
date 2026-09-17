@@ -92,6 +92,23 @@ export const Header: React.FC<HeaderProps> = ({
               Exercices & Niveaux
             </button>
             <button
+              id="nav-link-lesona"
+              onClick={() => onNavigate('lesona')}
+              className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-bold transition-all cursor-pointer ${
+                currentView === 'lesona' || currentView === 'lesoka'
+                  ? 'bg-teal-700 text-white shadow-sm'
+                  : 'text-teal-800 bg-teal-50/80 hover:bg-teal-100 border border-teal-200'
+              }`}
+            >
+              <BookOpen className="w-4 h-4 text-teal-600 group-hover:text-teal-700" />
+              <span>Workspace Lesona</span>
+              <span className={`text-[10px] font-extrabold px-1.5 py-0.5 rounded-full uppercase ${
+                currentView === 'lesona' || currentView === 'lesoka' ? 'bg-teal-800 text-teal-200' : 'bg-teal-200 text-teal-900'
+              }`}>
+                COURS PDF
+              </span>
+            </button>
+            <button
               id="nav-link-dashboard"
               onClick={() => onNavigate('dashboard')}
               className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium transition-colors cursor-pointer ${
@@ -128,8 +145,8 @@ export const Header: React.FC<HeaderProps> = ({
               <Info className="w-5 h-5" />
             </button>
 
-            {/* Cloud Sync Indicator */}
-            {currentUser && (
+            {/* Cloud Sync / Local Indicator */}
+            {currentUser ? (
               <div 
                 title={isSyncing ? 'Mampifandray amin\'ny Cloud...' : 'Voatahiry an-tserasera ao amin\'ny Firestore'}
                 className="hidden lg:flex items-center gap-1 text-[11px] font-semibold text-emerald-800 bg-emerald-50/80 border border-emerald-200 px-2.5 py-1 rounded-full"
@@ -137,17 +154,25 @@ export const Header: React.FC<HeaderProps> = ({
                 <Cloud className={`w-3.5 h-3.5 ${isSyncing ? 'animate-pulse text-amber-600' : 'text-emerald-600'}`} />
                 <span>{isSyncing ? 'Fampifandraisana...' : 'Cloud Synced'}</span>
               </div>
-            )}
+            ) : student?.authProvider === 'local' ? (
+              <div 
+                title="Kaonty voatahiry eto an-toerana (Mode Local)"
+                className="hidden lg:flex items-center gap-1 text-[11px] font-semibold text-teal-800 bg-teal-50 border border-teal-200 px-2 py-0.5 rounded-full"
+              >
+                <span className="w-1.5 h-1.5 rounded-full bg-teal-500"></span>
+                <span>Mode Local</span>
+              </div>
+            ) : null}
 
             {/* Student badge or Connexion button */}
-            {currentUser ? (
+            {currentUser || student?.authProvider === 'local' ? (
               <button
                 id="btn-profile-badge"
                 onClick={onOpenProfile}
                 className="flex items-center gap-2 pl-2 pr-3 py-1.5 rounded-xl border border-stone-200 bg-stone-50 hover:bg-stone-100 transition-colors text-left cursor-pointer"
               >
                 <div className="w-7 h-7 rounded-full bg-emerald-600 text-white flex items-center justify-center font-bold text-xs">
-                  {currentUser.photoURL ? (
+                  {currentUser?.photoURL ? (
                     <img src={currentUser.photoURL} alt="Avatar" className="w-full h-full rounded-full object-cover" referrerPolicy="no-referrer" />
                   ) : (
                     student.fullName ? student.fullName[0].toUpperCase() : 'M'
@@ -174,6 +199,51 @@ export const Header: React.FC<HeaderProps> = ({
             )}
           </div>
         </div>
+      </div>
+
+      {/* Mobile Sub-Navigation Bar */}
+      <div className="md:hidden border-t border-stone-200/80 bg-stone-50/80 px-3 py-1.5 flex items-center gap-1.5 overflow-x-auto text-xs">
+        <button
+          id="mobile-nav-home"
+          onClick={() => onNavigate('home')}
+          className={`px-2.5 py-1.5 rounded-lg whitespace-nowrap font-medium transition-colors ${
+            currentView === 'home' ? 'bg-stone-200 text-stone-900 font-bold' : 'text-stone-600'
+          }`}
+        >
+          Fandraisana
+        </button>
+        <button
+          id="mobile-nav-classes"
+          onClick={() => onNavigate('classes')}
+          className={`px-2.5 py-1.5 rounded-lg whitespace-nowrap font-medium transition-colors ${
+            currentView === 'classes' || currentView === 'subjects' || currentView === 'exercise' 
+              ? 'bg-emerald-100 text-emerald-900 font-bold' 
+              : 'text-stone-600'
+          }`}
+        >
+          Fanazaran-tena
+        </button>
+        <button
+          id="mobile-nav-lesona"
+          onClick={() => onNavigate('lesona')}
+          className={`px-2.5 py-1.5 rounded-lg whitespace-nowrap font-bold flex items-center gap-1 transition-all ${
+            currentView === 'lesona' || currentView === 'lesoka'
+              ? 'bg-teal-700 text-white shadow-xs' 
+              : 'bg-teal-50 text-teal-800 border border-teal-200'
+          }`}
+        >
+          <BookOpen className="w-3.5 h-3.5 text-teal-600" />
+          <span>Workspace Lesona</span>
+        </button>
+        <button
+          id="mobile-nav-dashboard"
+          onClick={() => onNavigate('dashboard')}
+          className={`px-2.5 py-1.5 rounded-lg whitespace-nowrap font-medium transition-colors ${
+            currentView === 'dashboard' ? 'bg-stone-200 text-stone-900 font-bold' : 'text-stone-600'
+          }`}
+        >
+          Tabilao
+        </button>
       </div>
     </header>
   );
