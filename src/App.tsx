@@ -10,6 +10,7 @@ import { StudentDashboard } from './components/StudentDashboard';
 import { BulletinView } from './components/BulletinView';
 import { AuthModal } from './components/AuthModal';
 import { CurriculumInfoModal } from './components/CurriculumInfoModal';
+import { AboutModal } from './components/AboutModal';
 import { LesonaWorkspace } from './components/LesonaWorkspace';
 import { 
   GradeLevel, 
@@ -42,6 +43,7 @@ function AppContent() {
   // Modals state
   const [isAuthModalOpen, setIsAuthModalOpen] = useState<boolean>(false);
   const [isCurriculumModalOpen, setIsCurriculumModalOpen] = useState<boolean>(false);
+  const [isAboutModalOpen, setIsAboutModalOpen] = useState<boolean>(false);
 
   // 1. Navigation handlers
   const handleNavigate = (view: string) => {
@@ -115,6 +117,7 @@ function AppContent() {
         onNavigate={handleNavigate}
         onOpenProfile={() => setIsAuthModalOpen(true)}
         onOpenCurriculumInfo={() => setIsCurriculumModalOpen(true)}
+        onOpenAbout={() => setIsAboutModalOpen(true)}
       />
 
       {/* Main Content Router */}
@@ -125,6 +128,7 @@ function AppContent() {
             onLogin={() => setIsAuthModalOpen(true)}
             onSelectClass={handleSelectClassFromHome}
             onOpenCurriculumInfo={() => setIsCurriculumModalOpen(true)}
+            onOpenAbout={() => setIsAboutModalOpen(true)}
             onOpenLesona={() => handleNavigate('lesona')}
             onOpenLesoka={() => handleNavigate('lesona')}
           />
@@ -241,6 +245,12 @@ function AppContent() {
       <CurriculumInfoModal
         isOpen={isCurriculumModalOpen}
         onClose={() => setIsCurriculumModalOpen(false)}
+      />
+
+      {/* About Us & Creator Contact / Enterprise Solutions Modal */}
+      <AboutModal
+        isOpen={isAboutModalOpen}
+        onClose={() => setIsAboutModalOpen(false)}
       />
     </div>
   );

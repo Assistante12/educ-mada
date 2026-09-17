@@ -1,0 +1,13 @@
+# Allow all web crawlers including Googlebot
+User-agent: *
+Allow: /
+
+# Googlebot specific
+User-agent: Googlebot
+Allow: /
+
+User-agent: Googlebot-Mobile
+Allow: /
+
+# Sitemap location for Google Search Console
+Sitemap: https://educ-mada.vercel.app/sitemap.xml

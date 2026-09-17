@@ -21,6 +21,7 @@ interface HomePageProps {
   onLogin: () => void;
   onSelectClass: (grade: GradeLevel, serie?: TerminaleSerie) => void;
   onOpenCurriculumInfo: () => void;
+  onOpenAbout: () => void;
   onOpenLesona?: () => void;
   onOpenLesoka?: () => void;
 }
@@ -30,6 +31,7 @@ export const HomePage: React.FC<HomePageProps> = ({
   onLogin,
   onSelectClass,
   onOpenCurriculumInfo,
+  onOpenAbout,
   onOpenLesona,
   onOpenLesoka,
 }) => {
@@ -280,18 +282,72 @@ export const HomePage: React.FC<HomePageProps> = ({
         </div>
       </section>
 
+      {/* À Propos de nous & Solutions Entreprises Banner */}
+      <section className="bg-stone-900 text-white py-8 px-4 sm:px-6 lg:px-8 border-t border-stone-800">
+        <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
+          <div className="flex items-center gap-4">
+            <div className="w-12 h-12 rounded-2xl bg-emerald-800/80 p-1.5 flex items-center justify-center shrink-0 border border-emerald-500/40">
+              <img 
+                src="/icon.svg" 
+                alt="Educ-Mada" 
+                className="w-full h-full object-contain"
+                referrerPolicy="no-referrer"
+              />
+            </div>
+            <div>
+              <div className="flex items-center gap-2">
+                <span className="text-sm font-black text-white">Educ-Mada</span>
+                <span className="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-md bg-amber-400/20 text-amber-300 border border-amber-400/30">
+                  À Propos de nous
+                </span>
+              </div>
+              <p className="text-xs text-stone-300 mt-1 max-w-xl">
+                Tetikasa fanabeazana nomerika Malagasy. Mpamorona : <strong>Ravelomanantsoa Urmin</strong> (Contact: <a href="tel:0323911654" className="text-amber-300 hover:underline">032 39 116 54</a>).
+                Manolotra famolavolana <strong>Site Web sy Rindranasa matihanina ho an'ny ENTREPRISE lehibe</strong> koa izahay.
+              </p>
+            </div>
+          </div>
+
+          <div className="flex flex-wrap items-center gap-2.5 w-full md:w-auto">
+            <button
+              id="btn-open-about-footer"
+              onClick={onOpenAbout}
+              className="flex-1 md:flex-none px-4 py-2.5 rounded-xl bg-amber-400 hover:bg-amber-300 text-stone-950 font-black text-xs shadow-sm transition-all cursor-pointer text-center"
+            >
+              Hizaha ny mombamomba anay (À Propos)
+            </button>
+            <a
+              id="btn-footer-call-creator"
+              href="tel:0323911654"
+              className="flex-1 md:flex-none px-4 py-2.5 rounded-xl bg-emerald-700 hover:bg-emerald-600 text-white font-bold text-xs shadow-sm transition-all cursor-pointer text-center"
+            >
+              Hiantso : 032 39 116 54
+            </a>
+          </div>
+        </div>
+      </section>
+
       {/* Footer banner */}
       <footer className="border-t border-stone-200 bg-white py-6 px-4 text-center text-xs text-stone-500">
         <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3">
           <div>
-            FanabeazanaIA Madagascar • Mifototra amin'ny programa ofisialin'ny MEN
+            Educ-Mada • Fanabeazana & Fampandrosoana Nomerika Malagasy
           </div>
-          <div className="flex items-center gap-4">
+          <div className="flex flex-wrap items-center justify-center gap-4">
             <button 
+              id="footer-about-link"
+              onClick={onOpenAbout}
+              className="text-amber-800 hover:underline font-bold cursor-pointer"
+            >
+              À Propos de nous & Contact Créateur
+            </button>
+            <span>•</span>
+            <button 
+              id="footer-curriculum-link"
               onClick={onOpenCurriculumInfo}
               className="text-emerald-700 hover:underline font-medium cursor-pointer"
             >
-              Loharano sy Fandaharam-pianarana Ofisialy
+              Loharano sy Fandaharam-pianarana MEN
             </button>
             <span>•</span>
             <span>CEPE • BEPC • BACC (L, S, OSE)</span>
